@@ -1,40 +1,68 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
+import Main from "./pages/Main/Main";
+
+// import Header from "./components/Header"
+// import Footer from "./components/Footer"
+// import { EthereumProvider } from "./contexts/Ethereum"
+// import ModalNetwork from "./components/ModalNetwork"
+// import useEthereum from "./hooks/useEthereum"
+// import { CHAIN_ID } from "./constants"
+// import Redeem from "./pages/Redeem"
+// import Settle from "./pages/Settle"
 
 function App() {
+  // const { chainId } = useEthereum();
   return (
-    <div className="App">
-      <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <div className="py-8 px-8 max-w-sm mx-auto bg-white rounded-xl shadow-md space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6">
-          <div className="text-center space-y-2 sm:text-left">
-            <div className="space-y-0.5">
-              <p className="text-lg text-black font-semibold">
-                Erin Lindford
-              </p>
-              <p className="text-gray-500 font-medium">
-                Product Engineer
-              </p>
-            </div>
-            <button className="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">Message</button>
-          </div>
+    <Router>
+      <div>
+        {/* <Header /> */}
+        <div>
+          <Switch>
+            {/* <Route path="/redeem">
+              <Redeem />
+            </Route>
+            <Route path="/settle">
+              <Settle />
+            </Route> */}
+            <Route path="/">
+              <Main />
+            </Route>
+          </Switch>
         </div>
-
-      </header>
-    </div>
+      </div>
+      {/* <ModalNetwork isOpen={chainId !== undefined && chainId !== CHAIN_ID.MAINNET} /> */}
+    </Router>
   );
 }
 
-export default App;
+const Providers: React.FC = ({ children }) => {
+  return (
+    <>
+    {/* <ThemeProvider theme={styledTheme}>
+      <ChakraProvider theme={chakraTheme}>
+        <EthereumProvider>
+          <GammaProvider> */}
+            {children}
+          {/* </GammaProvider>
+        </EthereumProvider>
+      </ChakraProvider>
+    </ThemeProvider> */}
+    </>
+  );
+};
+
+function withProviders<P>(
+  Component: React.ComponentType<P>
+) {
+  const ComponentProviders = (props: P) => {
+    return (
+      <Providers>
+        <Component {...props}/>
+      </Providers>
+    )
+  };
+  return ComponentProviders;
+}
+
+export default withProviders(App);
