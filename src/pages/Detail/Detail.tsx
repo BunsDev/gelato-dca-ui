@@ -21,13 +21,13 @@ const Detail = () => {
               Add Fund
             </button>
           </div>
-          <div className="grid grid-cols-2 gap-3 font-mono">
-            <div className="bg-white rounded-lg p-4">
+          <div className="grid grid-cols-7 gap-3 font-mono">
+            <div className="bg-white rounded-lg p-4 col-span-4">
               <div className="grid grid-cols-2">
                 <div>
                   <div className="mb-4">
                     <div className="text-md text-gray-500">DCA interval<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
-                    <div className="text-lg">24 Hours</div>
+                    <div className="text-lg">every 24 Hours</div>
                   </div>
                   <div className="mb-4">
                     <div className="text-md text-gray-500">DCA amount<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
@@ -54,7 +54,7 @@ const Detail = () => {
                 </div>
               </div>
             </div>
-            <div>
+            <div className="col-span-3">
               <div className="bg-white rounded-lg p-4">
                 <div className="text-lg">Available Funds</div>
                 <div className="mt-3 flex justify-between">
