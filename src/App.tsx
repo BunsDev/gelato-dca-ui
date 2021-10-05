@@ -16,7 +16,7 @@ function App() {
   // const { chainId } = useEthereum();
   return (
     <Router>
-      <div className="flex-col h-screen">
+      <div className="flex-col h-full">
         <div className="fixed flex w-screen justify-between py-3 px-5">
           <div className="flex items-center">
             <img src={Logo} className="h-7"/>
@@ -26,7 +26,7 @@ function App() {
           </div>
           <button className="bg-blue-400 hover:bg-blue-500 text-white px-8 py-2 rounded-xl font-mono">Connect</button>
         </div>
-        <div className="bg-red-100 h-full">
+        <div className="bg-red-100 pb-10 min-h-screen">
           {/* <Header /> */}
           <div>
             <Switch>
