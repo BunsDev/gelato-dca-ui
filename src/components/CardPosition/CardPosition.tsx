@@ -36,7 +36,11 @@ const CardPosition: React.FC<CardPositionProps> = ({ position }) => {
         </div>
         <div className="py-1">
           <div className="text-sm">Next DCA in</div>  
-          <div className="font-bold">24:20:20</div>
+          <div className="font-bold">
+            24:20:20
+            {/* <span className="text-blue-600">Executing DCA</span> */}
+            {/* <span className="text-red-500">Not enough fund</span> */}
+          </div>
         </div>
       </div>
     </div>  
