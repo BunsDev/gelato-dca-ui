@@ -15,7 +15,7 @@ const CardPosition: React.FC<CardPositionProps> = ({ position }) => {
           </span>
         </div>
         <div className="py-1">
-          <div className="text-sm">Funds left</div>
+          <div className="text-sm">Available Funds</div>
           <div className="font-bold">700 USDC</div>
         </div>
         <div className="py-1">
@@ -23,7 +23,7 @@ const CardPosition: React.FC<CardPositionProps> = ({ position }) => {
           <div className="font-bold">4 ETH</div>
         </div>
         <div className="py-1">
-          <div className="text-sm">Withdrawable</div>  
+          <div className="text-sm">Claimable</div>  
           <div className="font-bold">0.1 ETH</div>
         </div>
         <div className="py-1">
