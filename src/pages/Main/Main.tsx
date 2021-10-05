@@ -1,7 +1,10 @@
 import CardPosition from "../../components/CardPosition/CardPosition";
 import { DCAPosition } from "../../types";
+import { useHistory } from "react-router-dom";
 
 const Main = () => {
+    const history = useHistory();
+
     const positions: DCAPosition[] = [
       {
         positionId: "1",
@@ -16,6 +19,14 @@ const Main = () => {
       },
     ]
 
+    const goToAdd = () => {
+      history.push("/add");
+    }
+
+    const goToDetail = (positionId: string) => {
+      history.push("/position/" + positionId);
+    }
+
     return (
       <div className="w-full flex">
           <div className="w-full sm:w-3/4 lg:w-2/3 mt-28 mx-auto">
@@ -25,7 +36,8 @@ const Main = () => {
                   Learn about Dollar-Cost-Averaging using Dango ↗
                 </a>
               </div>
-                <button className="bg-red-400 hover:bg-red-500 rounded-lg p-4 m-2 font-mono font-bold text-white">
+                <button className="bg-red-400 hover:bg-red-500 rounded-lg p-4 m-2 font-mono font-bold text-white"
+                  onClick={goToAdd}>
                   + New Position
                 </button>
             </div>
@@ -43,7 +55,9 @@ const Main = () => {
                 {positions.map((position) => {
                   return (
                     <div className="mb-5">
-                      <CardPosition position={position} />
+                      <div onClick={() => goToDetail(position.positionId)}>
+                        <CardPosition position={position} />
+                      </div>
                     </div>
                   );
                 })}

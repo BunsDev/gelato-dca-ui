@@ -2,15 +2,13 @@ import React from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import Main from "./pages/Main/Main";
 
-// import Header from "./components/Header"
-// import Footer from "./components/Footer"
 // import { EthereumProvider } from "./contexts/Ethereum"
 // import ModalNetwork from "./components/ModalNetwork"
 // import useEthereum from "./hooks/useEthereum"
 // import { CHAIN_ID } from "./constants"
-// import Redeem from "./pages/Redeem"
-// import Settle from "./pages/Settle"
 import Logo from "./assets/dango-placeholder.png";
+import Create from "./pages/Create/Create";
+import Detail from "./pages/Detail/Detail";
 
 function App() {
   // const { chainId } = useEthereum();
@@ -27,15 +25,14 @@ function App() {
           <button className="bg-blue-400 hover:bg-blue-500 text-white px-8 py-2 rounded-xl font-mono">Connect</button>
         </div>
         <div className="bg-red-100 pb-10 min-h-screen">
-          {/* <Header /> */}
           <div>
             <Switch>
-              {/* <Route path="/redeem">
-                <Redeem />
+              <Route path="/add">
+                <Create />
               </Route>
-              <Route path="/settle">
-                <Settle />
-              </Route> */}
+              <Route exact path="/position/:positionId">
+                <Detail />
+              </Route>
               <Route path="/">
                 <Main />
               </Route>
