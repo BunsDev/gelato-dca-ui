@@ -1,5 +1,6 @@
 import { BsInfoCircle, BsQuestionCircle, BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { useHistory } from "react-router-dom"
+import ButtonBack from "../../components/ButtonBack/ButtonBack";
 
 const Detail = () => {
   const history = useHistory();
@@ -7,9 +8,7 @@ const Detail = () => {
   return (
     <div className="w-full flex">
         <div className="w-full sm:w-3/4 lg:w-2/3 mt-28 mx-auto">
-          <span className="cursor-pointer text-gray-600" onClick={history.goBack}>
-            <BsArrowLeftShort className="inline" size="23px"/>Back to Positions overview
-          </span>
+          <ButtonBack label="Back to Positions overview" />
           <div className="my-2 flex">
             <div className="py-3 px-1 font-bold text-2xl">
               USDC<BsArrowRightShort className="inline pb-1" size="28px"/>ETH
