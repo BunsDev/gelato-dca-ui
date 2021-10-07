@@ -2,6 +2,7 @@ import { BsArrowRightShort, BsChevronDown, BsQuestionCircle } from "react-icons/
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import UsdcLogo from "../../assets/usdc.png";
 import EthLogo from "../../assets/eth.png";
+import Modal from "../../components/Modal/Modal";
 
 const Create = () => {
     return (
@@ -91,6 +92,9 @@ const Create = () => {
               </div>
             </div>
           </div>
+          {/* <Modal title="Select Token" isOpen={true} onDismiss={() => {}}>
+            Hello
+          </Modal> */}
       </div>
     );
 };

@@ -32,7 +32,7 @@ const Main = () => {
           <div className="w-full sm:w-3/4 lg:w-2/3 mt-28 mx-auto">
             <div className="grid grid-cols-3">
               <div className="col-span-2 bg-white rounded-lg p-4 m-2">
-                <a className="font-bold" href="#">
+                <a className="font-bold underline" href="#">
                   Learn about Dollar-Cost-Averaging using Dango ↗
                 </a>
               </div>
@@ -54,7 +54,7 @@ const Main = () => {
                   </span>}
                 {positions.map((position) => {
                   return (
-                    <div className="mb-5">
+                    <div key={position.positionId} className="mb-5">
                       <div onClick={() => goToDetail(position.positionId)}>
                         <CardPosition position={position} />
                       </div>
