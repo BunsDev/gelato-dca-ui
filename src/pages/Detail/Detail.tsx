@@ -1,6 +1,8 @@
 import { BsInfoCircle, BsQuestionCircle, BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { useHistory } from "react-router-dom"
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
+import UsdcLogo from "../../assets/usdc.png";
+import EthLogo from "../../assets/eth.png";
 
 const Detail = () => {
   const history = useHistory();
@@ -11,7 +13,10 @@ const Detail = () => {
           <ButtonBack label="Back to Positions overview" />
           <div className="my-2 flex">
             <div className="py-3 px-1 font-bold text-2xl">
-              USDC<BsArrowRightShort className="inline pb-1" size="28px"/>ETH
+              <img src={UsdcLogo} className="h-7 pb-1 pr-1 inline"/>USDC
+              <BsArrowRightShort className="inline pb-1 mx-1" size="28px"/> 
+              <img src={EthLogo} className="h-7 pb-1 pr-1 inline"/>ETH
+              {/* USDC<BsArrowRightShort className="inline pb-1" size="28px"/>ETH */}
             </div>
             <button className="hover:bg-red-300 border-2 border-red-400 rounded-lg px-3 py-1 my-2 mr-2 font-mono text-red-500 ml-auto">
               Exit Position

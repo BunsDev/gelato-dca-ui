@@ -49,7 +49,7 @@ const Main = () => {
                     </span>
                   </div>}
                 {positions.length > 0 && 
-                  <span className="font-mono py-2">
+                  <span className="font-mono py-2 mb-1">
                     Your DCA positions:
                   </span>}
                 {positions.map((position) => {

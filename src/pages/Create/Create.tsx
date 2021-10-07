@@ -16,7 +16,7 @@ const Create = () => {
                 <div className="w-1/4">
                   <div className="text-md">Token to Send</div>
                   <div className="border border-gray-300 rounded-full hover:bg-gray-200 px-4 py-2 mt-1 cursor-pointer flex items-center">
-                    <img src={UsdcLogo} className="h-5 pr-2"/>
+                    <img src={UsdcLogo} className="h-5 pr-3"/>
                     <div className="text-lg">USDC</div>
                     <BsChevronDown className="ml-auto inline" size="18px"/>
                   </div>
@@ -25,7 +25,7 @@ const Create = () => {
                 <div className="w-1/4">
                   <div className="text-md">Token to Receive</div>
                   <div className="border border-gray-300 rounded-full hover:bg-gray-200 px-4 py-2 mt-1 cursor-pointer flex items-center">
-                    <img src={EthLogo} className="h-5 pr-2"/>
+                    <img src={EthLogo} className="h-5 pr-3"/>
                     <div className="text-lg">ETH</div>
                     <BsChevronDown className="ml-auto inline" size="18px"/>
                   </div>
