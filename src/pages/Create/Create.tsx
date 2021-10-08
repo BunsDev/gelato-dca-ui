@@ -1,10 +1,11 @@
-import { BsArrowRightShort, BsChevronDown, BsQuestionCircle } from "react-icons/bs";
+import { BsArrowRightShort, BsQuestionCircle } from "react-icons/bs";
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
-import UsdcLogo from "../../assets/usdc.png";
-import EthLogo from "../../assets/eth.png";
-import Modal from "../../components/Modal/Modal";
+import SelectToken from "../../components/SelectToken/SelectToken";
+import { tokenIns } from "../../constants/tokens";
 
 const Create = () => {
+    const tokenOut = tokenIns[0];
+
     return (
       <div className="w-full flex">
           <div className="w-full sm:w-3/4 lg:w-1/2 mt-28 mx-auto relative">
@@ -16,20 +17,12 @@ const Create = () => {
               <div className="flex mt-4 items-center">
                 <div className="w-2/5">
                   <div className="text-md font-bold">Token to Send</div>
-                  <div className="border border-gray-300 rounded-full hover:bg-gray-200 px-4 py-2 mt-1 cursor-pointer flex items-center">
-                    <img src={UsdcLogo} className="h-5 pr-3"/>
-                    <div className="text-lg">USDC</div>
-                    <BsChevronDown className="ml-auto inline" size="18px"/>
-                  </div>
+                  <SelectToken token={tokenOut} />
                 </div>
                 <BsArrowRightShort className="mx-3" size="20px"/>
                 <div className="w-2/5">
                   <div className="text-md font-bold">Token to Receive</div>
-                  <div className="border border-gray-300 rounded-full hover:bg-gray-200 px-4 py-2 mt-1 cursor-pointer flex items-center">
-                    <img src={EthLogo} className="h-5 pr-3"/>
-                    <div className="text-lg">ETH</div>
-                    <BsChevronDown className="ml-auto inline" size="18px"/>
-                  </div>
+                  <SelectToken />
                 </div>
               </div>
               <div className="mt-5">
@@ -37,13 +30,13 @@ const Create = () => {
                 <div className="bg-gray-100 border border-gray-200 mt-1 p-3 rounded-2xl w-3/5">
                   <div className="flex">
                     <div className="shadow rounded-2xl bg-white cursor-pointer px-3 py-2 flex items-center">
-                      <img src={UsdcLogo} className="h-6 pr-2"/>
-                      <span className="text-lg">USDC</span>
+                      <img src={tokenOut.imageUri} className="h-6 pr-2"/>
+                      <span className="text-lg">{tokenOut.ticker}</span>
                     </div>
                     <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2" placeholder="0.0"/>
                   </div>
                   <div className="mt-3 text-sm text-gray-500">
-                    Balance: 1,000 USDC <span className="text-red-400 cursor-pointer">(MAX)</span>
+                    Balance: 1,000 {tokenOut.ticker} <span className="text-red-400 cursor-pointer">(MAX)</span>
                   </div>
                 </div>
               </div>
@@ -53,8 +46,8 @@ const Create = () => {
                 <div className="bg-gray-100 border border-gray-200 mt-1 p-3 rounded-2xl w-3/5">
                   <div className="flex">
                     <div className="shadow rounded-2xl bg-white cursor-pointer px-3 py-2 flex items-center">
-                      <img src={UsdcLogo} className="h-6 pr-2"/>
-                      <span className="text-lg">USDC</span>
+                      <img src={tokenOut.imageUri} className="h-6 pr-2"/>
+                      <span className="text-lg">{tokenOut.ticker}</span>
                     </div>
                     <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2" placeholder="0.0"/>
                   </div>
@@ -82,7 +75,7 @@ const Create = () => {
               </div>
               <div className="flex justify-center">
                 <div className="my-10 w-3/4 text-center">
-                  Depositing 10,000 USDC to buy 100 USDC worth of ETH every 20 hours.
+                  Depositing 10,000 {tokenOut.ticker} to buy 100 {tokenOut.ticker} worth of ETH every 20 hours.
                 </div>
               </div>
               <div className="flex">
@@ -92,9 +85,6 @@ const Create = () => {
               </div>
             </div>
           </div>
-          {/* <Modal title="Select Token" isOpen={true} onDismiss={() => {}}>
-            Hello
-          </Modal> */}
       </div>
     );
 };
