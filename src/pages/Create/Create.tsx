@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BsArrowRightShort, BsQuestionCircle } from "react-icons/bs";
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
+import SelectPeriod from "../../components/SelectPeriod/SelectPeriod";
 import SelectToken from "../../components/SelectToken/SelectToken";
 import { tokenIns, tokenOuts } from "../../constants/tokens";
 import { IntervalPeriod, Token } from "../../types";
@@ -10,8 +11,8 @@ const Create = () => {
     const [tokenIn, setTokenIn] = useState<Token>();
     const [funds, setFunds] = useState<string>("");
     const [dcaAmount, setDcaAmount] = useState<string>("");
-    const [valueInterval, setValueInterval] = useState<string>("");
-    const [periodInterval, setPeriodInterval] = useState<IntervalPeriod>();
+    const [valueInterval, setValueInterval] = useState<string>("1");
+    const [periodInterval, setPeriodInterval] = useState<IntervalPeriod>(IntervalPeriod.Hour);
 
     const handleSelectTokenOut = (token: Token) => {
       setTokenOut(token);
@@ -19,6 +20,17 @@ const Create = () => {
 
     const handleSelectTokenIn = (token: Token) => {
       setTokenIn(token);
+    }
+
+    const handleSetValueInterval = (value: string) => {
+      if (value.length === 0 || value === "0") {
+        value = "1";
+      }
+      setValueInterval(value);
+    }
+
+    const handleSelectIntervalPeriod = (period: IntervalPeriod) => {
+      setPeriodInterval(period);
     }
 
     return (
@@ -78,13 +90,12 @@ const Create = () => {
                   </div>
                   <div className="flex items-center">
                     <div className="bg-gray-100 border border-gray-200 mt-1 p-3 rounded-2xl">
-                      <input className="bg-gray-100 px-2 text-xl w-14 text-center" type="number" placeholder="1" min="1" value="1"/>
+                      <input className="bg-gray-100 px-2 text-xl w-14 text-center focus:outline-none" 
+                        type="number" placeholder="1" min="1" 
+                        value={valueInterval}
+                        onChange={(e) => handleSetValueInterval(e.target.value)}/>
                     </div>
-                    <div className="mx-3 grid grid-cols-3">
-                      <div className="flex items-center justify-center px-3 py-2 w-24 cursor-pointer rounded-l-2xl border-2 border-red-400">Hours</div>
-                      <div className="flex items-center justify-center px-3 py-2 w-24 cursor-pointer border-t-2 border-b-2 border-gray-200">Days</div>
-                      <div className="flex items-center justify-center px-3 py-2 w-24 cursor-pointer rounded-r-2xl border-2 border-gray-200">Weeks</div>
-                    </div>
+                    <SelectPeriod onSelect={(period) => handleSelectIntervalPeriod(period)} period={periodInterval}/>
                   </div>
                 </div>
               </div>
