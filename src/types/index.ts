@@ -10,3 +10,10 @@ export type DCAPosition = {
   lastDCA: string
   maxSlippage: string
 }
+
+export type Token = {
+  name: string
+  ticker: string
+  address: string
+  imageUri: string
+}
