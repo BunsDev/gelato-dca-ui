@@ -4,18 +4,18 @@ import EthLogo from "../assets/eth.png";
 
 export const tokenIns: Token[] = [
   {
-    name: "USDC",
-    ticker: "USDC",
+    name: "Ether",
+    ticker: "ETH",
     address: "aa",
-    imageUri: UsdcLogo
+    imageUri: EthLogo
   }
 ];
 
 export const tokenOuts: Token[] = [
   {
-    name: "Ether",
-    ticker: "ETH",
+    name: "USDC",
+    ticker: "USDC",
     address: "aa",
-    imageUri: EthLogo
+    imageUri: UsdcLogo
   }
 ];

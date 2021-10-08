@@ -1,10 +1,17 @@
+import { useState } from "react";
 import { BsArrowRightShort, BsQuestionCircle } from "react-icons/bs";
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import SelectToken from "../../components/SelectToken/SelectToken";
-import { tokenIns } from "../../constants/tokens";
+import { tokenIns, tokenOuts } from "../../constants/tokens";
+import { IntervalPeriod, Token } from "../../types";
 
 const Create = () => {
-    const tokenOut = tokenIns[0];
+    const [tokenOut, setTokenOut] = useState<Token>(tokenOuts[0]);
+    const [tokenIn, setTokenIn] = useState<Token>();
+    const [funds, setFunds] = useState<string>("");
+    const [dcaAmount, setDcaAmount] = useState<string>("");
+    const [valueInterval, setValueInterval] = useState<string>("");
+    const [periodInterval, setPeriodInterval] = useState<IntervalPeriod>();
 
     return (
       <div className="w-full flex">
@@ -29,11 +36,11 @@ const Create = () => {
                 <div className="text-md font-bold">Deposit Funds<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
                 <div className="bg-gray-100 border border-gray-200 mt-1 p-3 rounded-2xl w-3/5">
                   <div className="flex">
-                    <div className="shadow rounded-2xl bg-white cursor-pointer px-3 py-2 flex items-center">
+                    <div className="shadow rounded-2xl bg-white px-3 py-2 flex items-center">
                       <img src={tokenOut.imageUri} className="h-6 pr-2"/>
                       <span className="text-lg">{tokenOut.ticker}</span>
                     </div>
-                    <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2" placeholder="0.0"/>
+                    <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2 focus:outline-none" placeholder="0.0"/>
                   </div>
                   <div className="mt-3 text-sm text-gray-500">
                     Balance: 1,000 {tokenOut.ticker} <span className="text-red-400 cursor-pointer">(MAX)</span>
@@ -45,11 +52,11 @@ const Create = () => {
                 <div className="text-md font-bold">DCA Amount<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
                 <div className="bg-gray-100 border border-gray-200 mt-1 p-3 rounded-2xl w-3/5">
                   <div className="flex">
-                    <div className="shadow rounded-2xl bg-white cursor-pointer px-3 py-2 flex items-center">
+                    <div className="shadow rounded-2xl bg-white px-3 py-2 flex items-center">
                       <img src={tokenOut.imageUri} className="h-6 pr-2"/>
                       <span className="text-lg">{tokenOut.ticker}</span>
                     </div>
-                    <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2" placeholder="0.0"/>
+                    <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2 focus:outline-none" placeholder="0.0"/>
                   </div>
                   <div className="mt-3 text-sm text-gray-500">
                     Estimated number of DCA: 10
