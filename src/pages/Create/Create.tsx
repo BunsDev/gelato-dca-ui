@@ -5,6 +5,7 @@ import SelectPeriod from "../../components/SelectPeriod/SelectPeriod";
 import SelectToken from "../../components/SelectToken/SelectToken";
 import { tokenIns, tokenOuts } from "../../constants/tokens";
 import { IntervalPeriod, Token } from "../../types";
+import { cleanInputNumber } from "../../utils/validation";
 
 const Create = () => {
     const [tokenOut, setTokenOut] = useState<Token>(tokenOuts[0]);
@@ -22,10 +23,18 @@ const Create = () => {
       setTokenIn(token);
     }
 
+    const handleSetFunds = (value: string) => {
+      setFunds(cleanInputNumber(value));
+    }
+
+    const handleSetDcaAmount = (value: string) => {
+      setDcaAmount(cleanInputNumber(value));
+    }
+
     const handleSetValueInterval = (value: string) => {
-      if (value.length === 0 || value === "0") {
-        value = "1";
-      }
+      value = cleanInputNumber(value);
+      value = value.replaceAll(",", "");
+      value = value.replaceAll(".", "");
       setValueInterval(value);
     }
 
@@ -60,7 +69,9 @@ const Create = () => {
                       <img src={tokenOut.imageUri} className="h-6 pr-2"/>
                       <span className="text-lg">{tokenOut.ticker}</span>
                     </div>
-                    <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2 focus:outline-none" placeholder="0.0"/>
+                    <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2 focus:outline-none" placeholder="0.0"
+                      value={funds}
+                      onChange={(e) => handleSetFunds(e.target.value)}/>
                   </div>
                   <div className="mt-3 text-sm text-gray-500">
                     Balance: 1,000 {tokenOut.ticker} <span className="text-red-400 cursor-pointer">(MAX)</span>
@@ -76,7 +87,9 @@ const Create = () => {
                       <img src={tokenOut.imageUri} className="h-6 pr-2"/>
                       <span className="text-lg">{tokenOut.ticker}</span>
                     </div>
-                    <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2 focus:outline-none" placeholder="0.0"/>
+                    <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2 focus:outline-none" placeholder="0.0"
+                      value={dcaAmount}
+                      onChange={(e) => handleSetDcaAmount(e.target.value)}/>
                   </div>
                   <div className="mt-3 text-sm text-gray-500">
                     Estimated number of DCA: 10
@@ -91,7 +104,7 @@ const Create = () => {
                   <div className="flex items-center">
                     <div className="bg-gray-100 border border-gray-200 mt-1 p-3 rounded-2xl">
                       <input className="bg-gray-100 px-2 text-xl w-14 text-center focus:outline-none" 
-                        type="number" placeholder="1" min="1" 
+                        placeholder="1"
                         value={valueInterval}
                         onChange={(e) => handleSetValueInterval(e.target.value)}/>
                     </div>
