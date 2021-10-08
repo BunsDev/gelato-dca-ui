@@ -42,7 +42,7 @@ const Main = () => {
                 </button>
             </div>
             <div className="bg-white rounded-lg px-4 py-2 m-2 flex flex-col">
-                {positions.length == 0 && 
+                {positions.length === 0 && 
                   <div className="flex flex-col h-52">
                     <span className="font-mono self-center my-auto">
                       Your DCA positions will appear here.

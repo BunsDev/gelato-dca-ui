@@ -13,6 +13,14 @@ const Create = () => {
     const [valueInterval, setValueInterval] = useState<string>("");
     const [periodInterval, setPeriodInterval] = useState<IntervalPeriod>();
 
+    const handleSelectTokenOut = (token: Token) => {
+      setTokenOut(token);
+    }
+
+    const handleSelectTokenIn = (token: Token) => {
+      setTokenIn(token);
+    }
+
     return (
       <div className="w-full flex">
           <div className="w-full sm:w-3/4 lg:w-1/2 mt-28 mx-auto relative">
@@ -24,12 +32,12 @@ const Create = () => {
               <div className="flex mt-4 items-center">
                 <div className="w-2/5">
                   <div className="text-md font-bold">Token to Send</div>
-                  <SelectToken token={tokenOut} />
+                  <SelectToken token={tokenOut} tokens={tokenOuts} onSelect={handleSelectTokenOut}/>
                 </div>
                 <BsArrowRightShort className="mx-3" size="20px"/>
                 <div className="w-2/5">
                   <div className="text-md font-bold">Token to Receive</div>
-                  <SelectToken />
+                  <SelectToken token={tokenIn} tokens={tokenIns} onSelect={handleSelectTokenIn}/>
                 </div>
               </div>
               <div className="mt-5">

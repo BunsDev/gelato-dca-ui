@@ -1,13 +1,15 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { BsChevronDown } from "react-icons/bs";
 import { Token } from "../../types";
 import ModalTokens from "../ModalTokens/ModalTokens";
 
 interface SelectTokenProps {
   token?: Token,
+  tokens: Token[],
+  onSelect: (token: Token) => void,
 }
 
-const SelectToken: React.FC<SelectTokenProps> = ({ token }) => {
+const SelectToken: React.FC<SelectTokenProps> = ({ token, tokens, onSelect }) => {
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
     return (
@@ -23,7 +25,11 @@ const SelectToken: React.FC<SelectTokenProps> = ({ token }) => {
             </div>}
           <BsChevronDown className="ml-auto inline" size="18px"/>
         </div>
-        <ModalTokens isOpen={isOpenModal} onDismiss={() => {setIsOpenModal(false)}} onSelect={(token) => alert(token)}/>
+        <ModalTokens 
+          isOpen={isOpenModal} 
+          onDismiss={() => {setIsOpenModal(false)}} 
+          onSelect={(token) => onSelect(token)}
+          tokens={tokens}/>
       </>
     );
 };
