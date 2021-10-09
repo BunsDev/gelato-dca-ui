@@ -2,8 +2,38 @@ import { BsInfoCircle, BsQuestionCircle, BsArrowRightShort } from "react-icons/b
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import UsdcLogo from "../../assets/usdc.png";
 import EthLogo from "../../assets/eth.png";
+import { PositionTx } from "../../types";
+import { WEB3_DATA_TYPE } from "../../constants/web3";
+import { getEtherscanUrl } from "../../utils/misc";
 
 const Detail = () => {
+  const transactions: PositionTx[] = [
+    {
+      action: "DCA 0.1 ETH with 100 USDC",
+      timestamp: "2 minutes ago",
+      txHash: "0xc4036389f...7d30"
+    },
+    {
+      action: "DCA 0.1 ETH with 100 USDC",
+      timestamp: "12 minutes ago",
+      txHash: "0xc4036389f...6d54"
+    },
+    {
+      action: "Claim 0.5 ETH",
+      timestamp: "4 hours ago",
+      txHash: "0xc4036389f...422c"
+    },
+    {
+      action: "Add 500 USDC",
+      timestamp: "5 hours ago",
+      txHash: "0xc4036389f...420c"
+    },
+    {
+      action: "Open position with 1,000 USDC",
+      timestamp: "2 days ago",
+      txHash: "0xc4036389f...7d30"
+    },
+  ];
 
   return (
     <div className="w-full flex">
@@ -83,51 +113,21 @@ const Detail = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>DCA 0.1 ETH with 100 USDC</td>
-                  <td className="text-right">2 minutes ago</td>
-                  <td className="text-right">
-                    <a href="#" className="underline">0xc4036389f...7d49↗</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Claim 0.5 ETH</td>
-                  <td className="text-right">5 minutes ago</td>
-                  <td className="text-right">
-                    <a href="#" className="underline">0xc4036389f...7d49↗</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Add 500 USDC</td>
-                  <td className="text-right">5 minutes ago</td>
-                  <td className="text-right">
-                    <a href="#" className="underline">0xc4036389f...7d49↗</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>DCA 0.1 ETH with 100 USDC</td>
-                  <td className="text-right">5 minutes ago</td>
-                  <td className="text-right">
-                    <a href="#" className="underline">0xc4036389f...7d49↗</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>DCA 0.1 ETH with 100 USDC</td>
-                  <td className="text-right">5 minutes ago</td>
-                  <td className="text-right">
-                    <a href="#" className="underline">0xc4036389f...7d49↗</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Open position with 1,000 USDC</td>
-                  <td className="text-right">2 days ago</td>
-                  <td className="text-right">
-                    <a href="#" className="underline">0xc4036389f...7d49↗</a>
-                  </td>
-                </tr>
+                {transactions.map((tx) => {
+                  return (
+                    <tr>
+                      <td>{tx.action}</td>
+                      <td className="text-right">{tx.timestamp}</td>
+                      <td className="text-right">
+                        <a href={getEtherscanUrl(tx.txHash, WEB3_DATA_TYPE.Tx)} className="underline" target="_blank">
+                          {tx.txHash}↗
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
-
           </div>
         </div>
     </div>  

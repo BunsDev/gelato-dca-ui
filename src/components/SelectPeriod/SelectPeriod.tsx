@@ -1,5 +1,5 @@
 import React from "react";
-import { IntervalPeriod } from "../../types";
+import { IntervalPeriod } from "../../constants/misc";
 
 interface SelectPeriodProps {
   period: IntervalPeriod,

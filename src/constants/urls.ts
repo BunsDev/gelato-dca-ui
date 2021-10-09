@@ -1,1 +1,0 @@
-export const GUIDEBOOK_URL = "https://gitbook.dango.com/";

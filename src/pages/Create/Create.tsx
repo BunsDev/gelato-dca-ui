@@ -4,8 +4,9 @@ import { BsArrowRightShort, BsQuestionCircle } from "react-icons/bs";
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import SelectPeriod from "../../components/SelectPeriod/SelectPeriod";
 import SelectToken from "../../components/SelectToken/SelectToken";
+import { IntervalPeriod } from "../../constants/misc";
 import { tokenIns, tokenOuts } from "../../constants/tokens";
-import { IntervalPeriod, Token } from "../../types";
+import { Token } from "../../types";
 import { cleanInputNumber } from "../../utils/validation";
 
 const Create = () => {

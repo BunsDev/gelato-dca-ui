@@ -1,7 +1,7 @@
 import CardPosition from "../../components/CardPosition/CardPosition";
 import { DCAPosition } from "../../types";
 import { useHistory } from "react-router-dom";
-import { GUIDEBOOK_URL } from "../../constants/urls";
+import { GUIDEBOOK_URL } from "../../constants/endpoints";
 
 const Main = () => {
     const history = useHistory();
