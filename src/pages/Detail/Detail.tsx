@@ -5,8 +5,12 @@ import { WEB3_DATA_TYPE } from "../../constants/web3";
 import { formatDateHumanize, getEtherscanUrl } from "../../utils/misc";
 import { useParams } from "react-router";
 import { tokenIns, tokenOuts } from "../../constants/tokens";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { BigNumber } from "@ethersproject/bignumber";
+import ModalClaim from "./components/ModalClaim/ModalClaim";
+import ModalDeposit from "./components/ModalDeposit/ModalDeposit";
+import ModalExit from "./components/ModalExit/ModalExit";
+import ModalWIthdraw from "./components/ModalWithdraw/ModalWithdraw";
 
 interface DetailParams {
   positionId: string
@@ -14,6 +18,11 @@ interface DetailParams {
 
 const Detail = () => {
   let { positionId } = useParams<DetailParams>();
+
+  const [isOpenModalExit, setIsOpenModalExit] = useState<boolean>(false);
+  const [isOpenModalWithdraw, setIsOpenModalWithdraw] = useState<boolean>(false);
+  const [isOpenModalClaim, setIsOpenModalClaim] = useState<boolean>(false);
+  const [isOpenModalDeposit, setIsOpenModalDeposit] = useState<boolean>(false);
 
   const position: DCAPosition = {
     positionId: positionId,
@@ -73,10 +82,12 @@ const Detail = () => {
               <BsArrowRightShort className="inline pb-1 mx-1" size="28px"/> 
               <img src={position.tokenIn.imageUri} className="h-7 pb-1 pr-1 inline"/>{position.tokenIn.ticker}
             </div>
-            <button className="hover:bg-red-300 border-2 border-red-400 rounded-lg px-3 py-1 my-2 mr-2 font-mono text-red-500 ml-auto">
+            <button className="hover:bg-red-300 border-2 border-red-400 rounded-lg px-3 py-1 my-2 mr-2 font-mono text-red-500 ml-auto"
+              onClick={() => setIsOpenModalExit(true)}>
               Exit Position
             </button>
-            <button className="bg-red-400 hover:bg-red-500 rounded-lg px-8 py-1 my-2 font-mono text-white">
+            <button className="bg-red-400 hover:bg-red-500 rounded-lg px-8 py-1 my-2 font-mono text-white"
+              onClick={() => setIsOpenModalDeposit(true)}>
               Add Fund
             </button>
           </div>
@@ -120,14 +131,19 @@ const Detail = () => {
                 <div className="text-lg">Available Funds</div>
                 <div className="mt-3 flex justify-between">
                   <span className="text-2xl font-bold">{position.balanceOut} {position.tokenOut.ticker}</span>
-                  <button className="bg-blue-400 hover:bg-blue-500 rounded-lg text-white px-3">Withdraw</button>
+                  <button className="bg-blue-400 hover:bg-blue-500 rounded-lg text-white px-3"
+                    onClick={() => setIsOpenModalWithdraw(true)}>
+                    Withdraw</button>
                 </div>
               </div>
               <div className="bg-white rounded-lg p-4 mt-3">
                 <div className="text-lg">Claimable</div>
                 <div className="mt-3 flex justify-between">
                   <span className="text-2xl font-bold">{position.balanceIn} {position.tokenIn.ticker}</span>
-                  <button className="bg-blue-400 hover:bg-blue-500 rounded-lg text-white px-3">Claim</button>
+                  <button className="bg-blue-400 hover:bg-blue-500 rounded-lg text-white px-3"
+                    onClick={() => setIsOpenModalClaim(true)}>
+                      Claim
+                    </button>
                 </div>
               </div>
             </div>
@@ -160,6 +176,10 @@ const Detail = () => {
             </table>
           </div>
         </div>
+        <ModalExit isOpen={isOpenModalExit} onDismiss={() => setIsOpenModalExit(false)} onSubmit={() => {}}/>
+        <ModalDeposit isOpen={isOpenModalDeposit} onDismiss={() => setIsOpenModalDeposit(false)} onSubmit={() => {}}/>
+        <ModalWIthdraw isOpen={isOpenModalWithdraw} onDismiss={() => setIsOpenModalWithdraw(false)} onSubmit={() => {}}/>
+        <ModalClaim isOpen={isOpenModalClaim} onDismiss={() => setIsOpenModalClaim(false)} onSubmit={() => {}}/>
     </div>  
   );
 };
