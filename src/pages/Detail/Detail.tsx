@@ -5,6 +5,8 @@ import { WEB3_DATA_TYPE } from "../../constants/web3";
 import { formatDateHumanize, getEtherscanUrl } from "../../utils/misc";
 import { useParams } from "react-router";
 import { tokenIns, tokenOuts } from "../../constants/tokens";
+import { useMemo } from "react";
+import { BigNumber } from "@ethersproject/bignumber";
 
 interface DetailParams {
   positionId: string
@@ -53,6 +55,14 @@ const Detail = () => {
     },
   ];
 
+  const interval = useMemo(() => {
+    return `every ${formatDateHumanize(parseInt(position.intervalDCA))}`
+  }, [formatDateHumanize, position]);
+
+  const numOfDca = useMemo(() => {
+    return BigNumber.from(position.balanceOut).div(BigNumber.from(position.amountDCA)).toString();
+  }, [formatDateHumanize, position]);
+
   return (
     <div className="w-full flex">
         <div className="w-full sm:w-3/4 lg:w-2/3 mt-28 mx-auto">
@@ -77,16 +87,16 @@ const Detail = () => {
                   <div className="mb-4">
                     <div className="text-md text-gray-500">DCA interval<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
                     <div className="text-lg">
-                      every {formatDateHumanize(parseInt(position.intervalDCA))}
+                      {interval}
                     </div>
                   </div>
                   <div className="mb-4">
                     <div className="text-md text-gray-500">DCA amount<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
                     <div className="text-lg">{position.amountDCA} {position.tokenOut.ticker}</div>
                   </div>
-                  <div className="">
+                  <div>
                     <div className="text-md text-gray-500">DCA left</div>
-                    <div className="text-lg">10 times<BsInfoCircle className="inline pl-1 pb-1" size="16px"/></div>
+                    <div className="text-lg">{numOfDca} times<BsInfoCircle className="inline pl-1 pb-1" size="16px"/></div>
                   </div>
                 </div>
                 <div>
@@ -98,7 +108,7 @@ const Detail = () => {
                     <div className="text-md text-gray-500">Total bought</div>
                     <div className="text-lg">0.6 ETH</div>
                   </div>
-                  <div className="">
+                  <div>
                     <div className="text-md text-gray-500">Next DCA in</div>
                     <div className="text-lg">12:00:10</div>
                   </div>
