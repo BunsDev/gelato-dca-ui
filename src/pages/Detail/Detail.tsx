@@ -2,7 +2,7 @@ import { BsInfoCircle, BsQuestionCircle, BsArrowRightShort } from "react-icons/b
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import { DCAPosition, PositionTx } from "../../types";
 import { WEB3_DATA_TYPE } from "../../constants/web3";
-import { getEtherscanUrl } from "../../utils/misc";
+import { formatDateHumanize, getEtherscanUrl } from "../../utils/misc";
 import { useParams } from "react-router";
 import { tokenIns, tokenOuts } from "../../constants/tokens";
 
@@ -20,7 +20,7 @@ const Detail = () => {
     balanceIn: "0.5",
     balanceOut: "1000",
     amountDCA: "100",
-    intervalDCA: "1000",
+    intervalDCA: "86400",
     lastDCA: "0",
     maxSlippage: "10"
   };
@@ -77,7 +77,7 @@ const Detail = () => {
                   <div className="mb-4">
                     <div className="text-md text-gray-500">DCA interval<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
                     <div className="text-lg">
-                      every 24 Hours
+                      every {formatDateHumanize(parseInt(position.intervalDCA))}
                     </div>
                   </div>
                   <div className="mb-4">
