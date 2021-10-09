@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { BigNumber } from "ethers/lib/ethers";
+import { useMemo, useState } from "react";
 import { BsArrowRightShort, BsQuestionCircle } from "react-icons/bs";
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import SelectPeriod from "../../components/SelectPeriod/SelectPeriod";
@@ -14,6 +15,29 @@ const Create = () => {
     const [dcaAmount, setDcaAmount] = useState<string>("");
     const [valueInterval, setValueInterval] = useState<string>("1");
     const [periodInterval, setPeriodInterval] = useState<IntervalPeriod>(IntervalPeriod.Hour);
+    const maxBalance = "10000";
+
+    const numOfDca = useMemo(() => {
+      if (funds.length === 0 || dcaAmount.length === 0) {
+        return "-";
+      }
+
+      return BigNumber.from(funds).div(BigNumber.from(dcaAmount)).toString();
+    }, [funds, dcaAmount]);
+
+    const isInputValid = useMemo(() => {
+      if (funds.length === 0 || dcaAmount.length === 0 || !tokenOut || !tokenIn || valueInterval.length === 0 || !periodInterval) {
+        return false;
+      }
+      return true;
+    }, [funds, tokenOut, tokenIn, dcaAmount, valueInterval, periodInterval])
+    
+    const confirmationText = useMemo(() => {
+      let text = `Depositing ${funds} ${tokenOut.ticker}`;
+      text += ` to buy ${dcaAmount} ${tokenOut.ticker} worth of ${tokenIn?.ticker}`;
+      text += ` every ${valueInterval} ${periodInterval}.`;
+      return text;
+    }, [funds, tokenOut, tokenIn, dcaAmount, valueInterval, periodInterval])
 
     const handleSelectTokenOut = (token: Token) => {
       setTokenOut(token);
@@ -40,6 +64,10 @@ const Create = () => {
 
     const handleSelectIntervalPeriod = (period: IntervalPeriod) => {
       setPeriodInterval(period);
+    }
+
+    const handleSetMaxBalance = () => {
+      setFunds(maxBalance);
     }
 
     return (
@@ -74,7 +102,7 @@ const Create = () => {
                       onChange={(e) => handleSetFunds(e.target.value)}/>
                   </div>
                   <div className="mt-3 text-sm text-gray-500">
-                    Balance: 1,000 {tokenOut.ticker} <span className="text-red-400 cursor-pointer">(MAX)</span>
+                    Balance: {maxBalance} {tokenOut.ticker} <span className="text-red-400 cursor-pointer" onClick={handleSetMaxBalance}>(MAX)</span>
                   </div>
                 </div>
               </div>
@@ -92,7 +120,7 @@ const Create = () => {
                       onChange={(e) => handleSetDcaAmount(e.target.value)}/>
                   </div>
                   <div className="mt-3 text-sm text-gray-500">
-                    Estimated number of DCA: 10
+                    Estimated number of DCA: {numOfDca}
                   </div>
                 </div>
               </div>
@@ -112,12 +140,12 @@ const Create = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-center">
-                <div className="my-10 w-3/4 text-center">
-                  Depositing 10,000 {tokenOut.ticker} to buy 100 {tokenOut.ticker} worth of ETH every 20 hours.
-                </div>
-              </div>
-              <div className="flex">
+              {isInputValid && <div className="flex justify-center">
+                  <div className="mt-10 w-3/4 text-center">
+                    {confirmationText}
+                  </div>
+                </div>}
+              <div className="mt-10 flex">
                 <button className="bg-red-400 hover:bg-red-500 rounded-lg w-2/5 py-3 mx-auto font-mono font-bold text-white">
                   Approve
                 </button> 

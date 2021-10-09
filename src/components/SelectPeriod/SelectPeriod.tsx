@@ -19,13 +19,13 @@ const SelectPeriod: React.FC<SelectPeriodProps> = ({ period, onSelect }) => {
         <div className="mx-3 grid grid-cols-3">
           <SelectButtonProps className="rounded-l-2xl" label="Hours" 
             onClick={() => onSelect(IntervalPeriod.Hour)} 
-            selected={period == IntervalPeriod.Hour}/>
+            selected={period === IntervalPeriod.Hour}/>
           <SelectButtonProps className="border-t-2" label="Days" 
             onClick={() => onSelect(IntervalPeriod.Day)} 
-            selected={period == IntervalPeriod.Day}/>
+            selected={period === IntervalPeriod.Day}/>
           <SelectButtonProps className="rounded-r-2xl" label="Weeks" 
             onClick={() => onSelect(IntervalPeriod.Week)} 
-            selected={period == IntervalPeriod.Week}/>
+            selected={period === IntervalPeriod.Week}/>
         </div>
       </>
     );
