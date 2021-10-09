@@ -26,7 +26,7 @@ const Create = () => {
     }, [funds, dcaAmount]);
 
     const isInputValid = useMemo(() => {
-      if (funds.length === 0 || dcaAmount.length === 0 || !tokenOut || !tokenIn || valueInterval.length === 0 || !periodInterval) {
+      if (funds.length === 0 || dcaAmount.length === 0 || !tokenOut || !tokenIn || !periodInterval) {
         return false;
       }
       return true;
@@ -35,7 +35,23 @@ const Create = () => {
     const confirmationText = useMemo(() => {
       let text = `Depositing ${funds} ${tokenOut.ticker}`;
       text += ` to buy ${dcaAmount} ${tokenOut.ticker} worth of ${tokenIn?.ticker}`;
-      text += ` every ${valueInterval} ${periodInterval}.`;
+
+      let interval = "";
+      if (valueInterval.length > 0 && valueInterval !== "1" && valueInterval !== "0") {
+        interval += `${valueInterval} `;
+      }
+      if (periodInterval === IntervalPeriod.Hour) {
+        interval += "hour";
+      } else if (periodInterval === IntervalPeriod.Day) {
+        interval += "day";
+      } else if (periodInterval === IntervalPeriod.Week) {
+        interval += "week";
+      }
+      if (valueInterval.length > 0 && valueInterval !== "1" && valueInterval !== "0") {
+        interval += "s";
+      }
+
+      text += ` every ${interval}.`;
       return text;
     }, [funds, tokenOut, tokenIn, dcaAmount, valueInterval, periodInterval])
 
@@ -59,6 +75,7 @@ const Create = () => {
       value = cleanInputNumber(value);
       value = value.replaceAll(",", "");
       value = value.replaceAll(".", "");
+      if (value === "0") value = "";
       setValueInterval(value);
     }
 
