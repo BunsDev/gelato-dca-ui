@@ -18,7 +18,7 @@ const SelectToken: React.FC<SelectTokenProps> = ({ token, tokens, onSelect }) =>
           onClick={() => setIsOpenModal(true)}>
           {token && <div className="flex items-center">
               <img src={token.imageUri} className="h-6 pr-2"/>
-              <div className="text-lg">ETH</div>
+              <div className="text-lg">{token.ticker}</div>
             </div>}
           {!token && <div className="flex">
               <div className="text-lg">Select a token</div>
