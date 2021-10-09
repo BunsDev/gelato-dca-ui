@@ -1,8 +1,8 @@
 
 export type DCAPosition = {
   positionId: string
-  tokenIn: string
-  tokenOut: string
+  tokenIn: Token
+  tokenOut: Token
   balanceIn: string
   balanceOut: string
   amountDCA: string

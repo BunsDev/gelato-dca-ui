@@ -31,7 +31,7 @@ const Create = () => {
         return false;
       }
       return true;
-    }, [funds, tokenOut, tokenIn, dcaAmount, valueInterval, periodInterval])
+    }, [funds, tokenOut, tokenIn, dcaAmount, periodInterval])
     
     const confirmationText = useMemo(() => {
       let text = `Depositing ${funds} ${tokenOut.ticker}`;

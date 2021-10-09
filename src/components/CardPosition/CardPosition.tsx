@@ -1,7 +1,5 @@
 import { DCAPosition } from "../../types";
 import { BsQuestionCircle, BsArrowRightShort } from "react-icons/bs";
-import UsdcLogo from "../../assets/usdc.png";
-import EthLogo from "../../assets/eth.png";
 
 interface CardPositionProps {
   position: DCAPosition;
@@ -12,9 +10,9 @@ const CardPosition: React.FC<CardPositionProps> = ({ position }) => {
     <div className="bg-white shadow-md hover:bg-gray-100 border-2 border-red-300 rounded-md p-3 cursor-pointer">
       <div className="flex py-1">
         <span className="font-bold font-sans text-lg">
-          <img src={UsdcLogo} className="h-7 pb-1 pr-1 inline"/>{position.tokenIn}
+          <img src={position.tokenIn.imageUri} className="h-7 pb-1 pr-1 inline"/>{position.tokenIn.ticker}
           <BsArrowRightShort className="inline mx-2" size="22px"/> 
-          <img src={EthLogo} className="h-7 pb-1 pr-1 inline"/>{position.tokenOut}
+          <img src={position.tokenOut.imageUri} className="h-7 pb-1 pr-1 inline"/>{position.tokenOut.ticker}
         </span>
       </div>
       <div className="grid grid-cols-3 font-mono mt-1">

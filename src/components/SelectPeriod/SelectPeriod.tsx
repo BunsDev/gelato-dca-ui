@@ -17,13 +17,13 @@ const SelectPeriod: React.FC<SelectPeriodProps> = ({ period, onSelect }) => {
     return (
       <>
         <div className="mx-3 grid grid-cols-3">
-          <SelectButtonProps className="rounded-l-2xl" label="Hours" 
+          <SelectButton className="rounded-l-2xl" label="Hours" 
             onClick={() => onSelect(IntervalPeriod.Hour)} 
             selected={period === IntervalPeriod.Hour}/>
-          <SelectButtonProps className="border-t-2" label="Days" 
+          <SelectButton className="border-t-2" label="Days" 
             onClick={() => onSelect(IntervalPeriod.Day)} 
             selected={period === IntervalPeriod.Day}/>
-          <SelectButtonProps className="rounded-r-2xl" label="Weeks" 
+          <SelectButton className="rounded-r-2xl" label="Weeks" 
             onClick={() => onSelect(IntervalPeriod.Week)} 
             selected={period === IntervalPeriod.Week}/>
         </div>
@@ -31,7 +31,7 @@ const SelectPeriod: React.FC<SelectPeriodProps> = ({ period, onSelect }) => {
     );
 };
 
-const SelectButtonProps: React.FC<SelectButtonProps> = ({ label, selected, onClick, className }) => {
+const SelectButton: React.FC<SelectButtonProps> = ({ label, selected, onClick, className }) => {
   className += " flex items-center justify-center px-3 py-2 w-24 cursor-pointer border-2";
   className += ` ${selected ? "border-red-400" : "border-gray-200"}`;
     
