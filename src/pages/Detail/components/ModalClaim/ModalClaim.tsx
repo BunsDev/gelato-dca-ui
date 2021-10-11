@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import Button from "../../../../components/Button/Button";
 import Modal from "../../../../components/Modal/Modal";
 import { Token } from "../../../../types";
 
@@ -28,7 +29,7 @@ const ModalClaim: React.FC<ModalClaimProps> = ({ isOpen, onDismiss, onSubmit, am
               {amount} <img src={token.imageUri} className="h-9 pb-1 px-1 inline"/>
             </div>
             <div className="text-center mt-2">
-              <button className="bg-blue-400 rounded-xl py-2 px-5 text-white" onClick={handleSubmit}>Claim</button>
+              <Button label="Claim" onClick={() => {}} isPrimary={false} isMono/>
             </div>
           </div>
         </Modal>
