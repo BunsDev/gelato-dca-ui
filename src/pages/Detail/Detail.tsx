@@ -11,6 +11,7 @@ import ModalClaim from "./components/ModalClaim/ModalClaim";
 import ModalDeposit from "./components/ModalDeposit/ModalDeposit";
 import ModalExit from "./components/ModalExit/ModalExit";
 import ModalWIthdraw from "./components/ModalWithdraw/ModalWithdraw";
+import { getPositionOfLineAndCharacter } from "typescript";
 
 interface DetailParams {
   positionId: string
@@ -179,7 +180,9 @@ const Detail = () => {
         <ModalExit isOpen={isOpenModalExit} onDismiss={() => setIsOpenModalExit(false)} onSubmit={() => {}}/>
         <ModalDeposit isOpen={isOpenModalDeposit} onDismiss={() => setIsOpenModalDeposit(false)} onSubmit={() => {}}/>
         <ModalWIthdraw isOpen={isOpenModalWithdraw} onDismiss={() => setIsOpenModalWithdraw(false)} onSubmit={() => {}}/>
-        <ModalClaim isOpen={isOpenModalClaim} onDismiss={() => setIsOpenModalClaim(false)} onSubmit={() => {}}/>
+        <ModalClaim isOpen={isOpenModalClaim} onDismiss={() => setIsOpenModalClaim(false)} onSubmit={() => {}}
+          amount="0.1"
+          token={position.tokenIn}/>
     </div>  
   );
 };
