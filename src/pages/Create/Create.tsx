@@ -1,6 +1,7 @@
 import { BigNumber } from "ethers/lib/ethers";
 import { useMemo, useState } from "react";
 import { BsArrowRightShort, BsQuestionCircle } from "react-icons/bs";
+import Button from "../../components/Button/Button";
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import SelectPeriod from "../../components/SelectPeriod/SelectPeriod";
 import SelectToken from "../../components/SelectToken/SelectToken";
@@ -164,9 +165,10 @@ const Create = () => {
                   </div>
                 </div>}
               <div className="mt-10 flex">
-                <button className="bg-red-400 hover:bg-red-500 rounded-lg w-2/5 py-3 mx-auto font-mono font-bold text-white">
-                  Approve
-                </button> 
+                <div className="w-2/5 mx-auto">
+                  <Button label="Approve" onClick={() => {}} 
+                    isPrimary isMono={false} isBold fullWidth padding="py-3"/>
+                </div>
               </div>
             </div>
           </div>

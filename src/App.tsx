@@ -9,6 +9,7 @@ import Main from "./pages/Main/Main";
 import Logo from "./assets/dango-placeholder.png";
 import Create from "./pages/Create/Create";
 import Detail from "./pages/Detail/Detail";
+import Button from "./components/Button/Button";
 
 function App() {
   // const { chainId } = useEthereum();
@@ -22,7 +23,8 @@ function App() {
               Dango
             </span>
           </div>
-          <button className="bg-blue-400 hover:bg-blue-500 text-white px-8 py-2 rounded-xl font-mono">Connect</button>
+          <Button label="Connect" onClick={() => {}} 
+            isPrimary={false} isMono fullWidth={false} padding="px-8 py-2"/>
         </div>
         <div className="bg-red-100 pb-10 min-h-screen">
           <div>

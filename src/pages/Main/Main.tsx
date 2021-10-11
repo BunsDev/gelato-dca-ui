@@ -3,6 +3,7 @@ import { DCAPosition } from "../../types";
 import { useHistory } from "react-router-dom";
 import { GUIDEBOOK_URL } from "../../constants/endpoints";
 import { tokenIns, tokenOuts } from "../../constants/tokens";
+import Button from "../../components/Button/Button";
 
 const Main = () => {
     const history = useHistory();
@@ -38,10 +39,8 @@ const Main = () => {
                   Learn about Dollar-Cost-Averaging using Dango ↗
                 </a>
               </div>
-                <button className="bg-red-400 hover:bg-red-500 rounded-lg p-4 m-2 font-mono font-bold text-white"
-                  onClick={goToAdd}>
-                  + New Position
-                </button>
+              <Button label="+ New Position" onClick={goToAdd} 
+                  isPrimary isMono isBold fullWidth={false} padding="p-4 m-2"/>
             </div>
             <div className="bg-white rounded-lg px-4 py-2 m-2 flex flex-col">
                 {positions.length === 0 && 

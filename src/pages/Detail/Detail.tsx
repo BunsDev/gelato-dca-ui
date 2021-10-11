@@ -12,6 +12,7 @@ import ModalDeposit from "./components/ModalDeposit/ModalDeposit";
 import ModalExit from "./components/ModalExit/ModalExit";
 import ModalWIthdraw from "./components/ModalWithdraw/ModalWithdraw";
 import { getPositionOfLineAndCharacter } from "typescript";
+import Button from "../../components/Button/Button";
 
 interface DetailParams {
   positionId: string
@@ -83,14 +84,13 @@ const Detail = () => {
               <BsArrowRightShort className="inline pb-1 mx-1" size="28px"/> 
               <img src={position.tokenIn.imageUri} className="h-7 pb-1 pr-1 inline"/>{position.tokenIn.ticker}
             </div>
+            {/* TODO: CREATE COMPONENT IF NEEDED */}
             <button className="hover:bg-red-300 border-2 border-red-400 rounded-lg px-3 py-1 my-2 mr-2 font-mono text-red-500 ml-auto"
               onClick={() => setIsOpenModalExit(true)}>
               Exit Position
             </button>
-            <button className="bg-red-400 hover:bg-red-500 rounded-lg px-8 py-1 my-2 font-mono text-white"
-              onClick={() => setIsOpenModalDeposit(true)}>
-              Add Fund
-            </button>
+            <Button label="Add Fund" onClick={() => setIsOpenModalDeposit(true)} 
+              isPrimary isMono fullWidth={false} padding="px-8 py-1 my-2"/>
           </div>
           <div className="grid grid-cols-7 gap-3 font-mono">
             <div className="bg-white rounded-lg p-4 col-span-4">
@@ -132,19 +132,16 @@ const Detail = () => {
                 <div className="text-lg">Available Funds</div>
                 <div className="mt-3 flex justify-between">
                   <span className="text-2xl font-bold">{position.balanceOut} {position.tokenOut.ticker}</span>
-                  <button className="bg-blue-400 hover:bg-blue-500 rounded-lg text-white px-3"
-                    onClick={() => setIsOpenModalWithdraw(true)}>
-                    Withdraw</button>
+                  <Button label="Withdraw" onClick={() => setIsOpenModalWithdraw(true)} 
+                    isPrimary={false} isMono fullWidth={false} padding="px-3 py-1"/>
                 </div>
               </div>
               <div className="bg-white rounded-lg p-4 mt-3">
                 <div className="text-lg">Claimable</div>
                 <div className="mt-3 flex justify-between">
                   <span className="text-2xl font-bold">{position.balanceIn} {position.tokenIn.ticker}</span>
-                  <button className="bg-blue-400 hover:bg-blue-500 rounded-lg text-white px-3"
-                    onClick={() => setIsOpenModalClaim(true)}>
-                      Claim
-                    </button>
+                  <Button label="Claim" onClick={() => setIsOpenModalClaim(true)} 
+                    isPrimary={false} isMono fullWidth={false} padding="px-3 py-1"/>
                 </div>
               </div>
             </div>
