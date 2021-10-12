@@ -29,7 +29,7 @@ const ModalClaim: React.FC<ModalClaimProps> = ({ isOpen, onDismiss, onSubmit, am
               {amount} <img src={token.imageUri} className="h-9 pb-1 px-1 inline"/>
             </div>
             <div className="text-center mt-2">
-              <Button label="Claim" onClick={() => {}} isPrimary={false} isMono/>
+              <Button label="Claim" onClick={handleSubmit} isPrimary={false} isMono/>
             </div>
           </div>
         </Modal>

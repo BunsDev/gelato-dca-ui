@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { BsArrowRightShort, BsQuestionCircle } from "react-icons/bs";
 import Button from "../../components/Button/Button";
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
+import InputTokenAmount from "../../components/InputTokenAmount/InputTokenAmount";
 import SelectPeriod from "../../components/SelectPeriod/SelectPeriod";
 import SelectToken from "../../components/SelectToken/SelectToken";
 import { IntervalPeriod } from "../../constants/misc";
@@ -110,37 +111,25 @@ const Create = () => {
               </div>
               <div className="mt-5">
                 <div className="text-md font-bold">Deposit Funds<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
-                <div className="bg-gray-100 border border-gray-200 mt-1 p-3 rounded-2xl w-3/5">
-                  <div className="flex">
-                    <div className="shadow rounded-2xl bg-white px-3 py-2 flex items-center">
-                      <img src={tokenOut.imageUri} className="h-6 pr-2"/>
-                      <span className="text-lg">{tokenOut.ticker}</span>
+                <div className="mt-1 w-3/5">
+                  <InputTokenAmount token={tokenOut} onChange={(e) => handleSetFunds(e.target.value)} value={funds}>
+                    <div className="mt-3 text-sm text-gray-500">
+                      Balance: {maxBalance} {tokenOut.ticker} <span className="text-red-400 cursor-pointer" onClick={handleSetMaxBalance}>
+                        (MAX)
+                      </span>
                     </div>
-                    <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2 focus:outline-none" placeholder="0.0"
-                      value={funds}
-                      onChange={(e) => handleSetFunds(e.target.value)}/>
-                  </div>
-                  <div className="mt-3 text-sm text-gray-500">
-                    Balance: {maxBalance} {tokenOut.ticker} <span className="text-red-400 cursor-pointer" onClick={handleSetMaxBalance}>(MAX)</span>
-                  </div>
+                  </InputTokenAmount>
                 </div>
               </div>
 
               <div className="mt-5">
                 <div className="text-md font-bold">DCA Amount<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
-                <div className="bg-gray-100 border border-gray-200 mt-1 p-3 rounded-2xl w-3/5">
-                  <div className="flex">
-                    <div className="shadow rounded-2xl bg-white px-3 py-2 flex items-center">
-                      <img src={tokenOut.imageUri} className="h-6 pr-2"/>
-                      <span className="text-lg">{tokenOut.ticker}</span>
+                <div className="mt-1 w-3/5">
+                  <InputTokenAmount token={tokenOut} onChange={(e) => handleSetDcaAmount(e.target.value)} value={dcaAmount}>
+                    <div className="mt-3 text-sm text-gray-500">
+                      Estimated number of DCA: {numOfDca}
                     </div>
-                    <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2 focus:outline-none" placeholder="0.0"
-                      value={dcaAmount}
-                      onChange={(e) => handleSetDcaAmount(e.target.value)}/>
-                  </div>
-                  <div className="mt-3 text-sm text-gray-500">
-                    Estimated number of DCA: {numOfDca}
-                  </div>
+                  </InputTokenAmount>
                 </div>
               </div>
               <div className="flex mt-5">

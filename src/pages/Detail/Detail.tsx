@@ -174,9 +174,15 @@ const Detail = () => {
             </table>
           </div>
         </div>
-        <ModalExit isOpen={isOpenModalExit} onDismiss={() => setIsOpenModalExit(false)} onSubmit={() => {}}/>
-        <ModalDeposit isOpen={isOpenModalDeposit} onDismiss={() => setIsOpenModalDeposit(false)} onSubmit={() => {}}/>
-        <ModalWIthdraw isOpen={isOpenModalWithdraw} onDismiss={() => setIsOpenModalWithdraw(false)} onSubmit={() => {}}/>
+        <ModalExit isOpen={isOpenModalExit} onDismiss={() => setIsOpenModalExit(false)} onSubmit={() => {}} 
+          tokenIn={position.tokenIn} 
+          tokenOut={position.tokenOut} 
+          amountIn={position.balanceIn} 
+          amountOut={position.balanceOut}/>
+        <ModalDeposit isOpen={isOpenModalDeposit} onDismiss={() => setIsOpenModalDeposit(false)} onSubmit={() => {}} 
+          maxAmount={"10000"} token={position.tokenOut}/>
+        <ModalWIthdraw isOpen={isOpenModalWithdraw} onDismiss={() => setIsOpenModalWithdraw(false)} onSubmit={() => {}} 
+          maxAmount={position.balanceIn} token={position.tokenOut}/>
         <ModalClaim isOpen={isOpenModalClaim} onDismiss={() => setIsOpenModalClaim(false)} onSubmit={() => {}}
           amount="0.1"
           token={position.tokenIn}/>
