@@ -8,7 +8,6 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onDismiss, title, children }) => {
-
     const handleDismiss = useCallback(() => {
         onDismiss();
     }, [onDismiss]);
@@ -17,7 +16,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onDismiss, title, children }) => 
       <>
         {isOpen &&
           <div className="z-50 fixed inset-0 bg-gray-400 bg-opacity-50 flex items-center justify-center" onClick={handleDismiss}>
-              <div className="bg-white shadow-lg p-4 rounded-2xl w-1/3 mb-14" onClick={(e) => {e.stopPropagation()}}>
+              <div className="bg-white shadow-lg p-4 rounded-2xl w-4/5 md:w-2/3 lg:w-1/3 mb-14" onClick={(e) => {e.stopPropagation()}}>
                   <div className="flex justify-between">
                       <span className="text-lg font-sans">{title}</span>
                       <BsX className="text-3xl cursor-pointer" onClick={handleDismiss}/>

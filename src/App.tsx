@@ -10,6 +10,8 @@ import Logo from "./assets/dango-placeholder.png";
 import Create from "./pages/Create/Create";
 import Detail from "./pages/Detail/Detail";
 import Button from "./components/Button/Button";
+import Web3Account from "./components/Web3Account/Web3Account";
+import { EthereumProvider } from "./contexts/Ethereum";
 
 function App() {
   // const { chainId } = useEthereum();
@@ -23,8 +25,7 @@ function App() {
               Dango
             </span>
           </div>
-          <Button label="Connect" onClick={() => {}} 
-            isPrimary={false} isMono fullWidth={false} padding="px-8 py-2"/>
+          <Web3Account />
         </div>
         <div className="bg-red-100 pb-10 min-h-screen">
           <div>
@@ -54,7 +55,9 @@ const Providers: React.FC = ({ children }) => {
       <ChakraProvider theme={chakraTheme}>
         <EthereumProvider>
           <GammaProvider> */}
-            {children}
+            <EthereumProvider>
+              {children}
+            </EthereumProvider>
           {/* </GammaProvider>
         </EthereumProvider>
       </ChakraProvider>
