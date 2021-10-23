@@ -35,7 +35,7 @@ const ModalWithdraw: React.FC<ModalWithdrawProps> = ({ isOpen, onDismiss, onSubm
             <div className="mx-auto py-5">
               <InputTokenAmount token={token} onChange={(e) => {handleSetAmount(e.target.value)}} value={amount}>
                 <div className="mt-3 text-sm text-gray-500">
-                  Withdrawable: {maxAmount} {token.ticker} <span className="text-red-400 cursor-pointer" onClick={() => handleSetAmount(maxAmount)}>
+                  Withdrawable: {maxAmount} {token.symbol} <span className="text-red-400 cursor-pointer" onClick={() => handleSetAmount(maxAmount)}>
                     (MAX)
                   </span>
                 </div>

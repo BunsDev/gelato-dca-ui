@@ -35,7 +35,7 @@ const ModalDeposit: React.FC<ModalDepositProps> = ({ isOpen, onDismiss, onSubmit
             <div className="mx-auto py-5">
               <InputTokenAmount token={token} onChange={(e) => {handleSetAmount(e.target.value)}} value={amount}>
                 <div className="mt-3 text-sm text-gray-500">
-                  Balance: {maxAmount} {token.ticker} <span className="text-red-400 cursor-pointer" onClick={() => handleSetAmount(maxAmount)}>
+                  Balance: {maxAmount} {token.symbol} <span className="text-red-400 cursor-pointer" onClick={() => handleSetAmount(maxAmount)}>
                     (MAX)
                   </span>
                 </div>

@@ -3,3 +3,5 @@ export enum IntervalPeriod {
   Day = 86400,
   Week = 604800,
 }
+
+export const DEFAULT_REFRESH_INTERVAL = 10000;

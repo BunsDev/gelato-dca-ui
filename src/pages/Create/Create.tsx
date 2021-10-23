@@ -36,8 +36,8 @@ const Create = () => {
     }, [funds, tokenOut, tokenIn, dcaAmount, periodInterval])
     
     const confirmationText = useMemo(() => {
-      let text = `Depositing ${funds} ${tokenOut.ticker}`;
-      text += ` to buy ${dcaAmount} ${tokenOut.ticker} worth of ${tokenIn?.ticker}`;
+      let text = `Depositing ${funds} ${tokenOut.symbol}`;
+      text += ` to buy ${dcaAmount} ${tokenOut.symbol} worth of ${tokenIn?.symbol}`;
 
       let interval = "";
       if (valueInterval.length > 0 && valueInterval !== "1" && valueInterval !== "0") {
@@ -114,7 +114,7 @@ const Create = () => {
                 <div className="mt-1 w-3/5">
                   <InputTokenAmount token={tokenOut} onChange={(e) => handleSetFunds(e.target.value)} value={funds}>
                     <div className="mt-3 text-sm text-gray-500">
-                      Balance: {maxBalance} {tokenOut.ticker} <span className="text-red-400 cursor-pointer" onClick={handleSetMaxBalance}>
+                      Balance: {maxBalance} {tokenOut.symbol} <span className="text-red-400 cursor-pointer" onClick={handleSetMaxBalance}>
                         (MAX)
                       </span>
                     </div>

@@ -12,7 +12,7 @@ export interface ETHEREUM_CHAIN {
 }
 
 export type DCAPosition = {
-  positionId: string
+  id: string
   tokenIn: Token
   tokenOut: Token
   balanceIn: string
@@ -24,9 +24,10 @@ export type DCAPosition = {
 }
 
 export type Token = {
+  id: string
+  symbol: string
   name: string
-  ticker: string
-  address: string
+  decimals: string
   imageUri: string
 }
 

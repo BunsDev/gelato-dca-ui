@@ -4,23 +4,27 @@ import { useHistory } from "react-router-dom";
 import { GUIDEBOOK_URL } from "../../constants/endpoints";
 import { tokenIns, tokenOuts } from "../../constants/tokens";
 import Button from "../../components/Button/Button";
+import { usePositions } from "../../hooks/usePositions";
+import useEthereum from "../../hooks/useEthereum";
 
 const Main = () => {
     const history = useHistory();
+    const { accountAddress } = useEthereum();
+    const { positions, isLoading } = usePositions(accountAddress);
 
-    const positions: DCAPosition[] = [
-      {
-        positionId: "1",
-        tokenIn: tokenIns[0],
-        tokenOut: tokenOuts[0],
-        balanceIn: "1000",
-        balanceOut: "0.1",
-        amountDCA: "100",
-        intervalDCA: "600",
-        lastDCA: "0",
-        maxSlippage: "10",
-      },
-    ]
+    // const positions: DCAPosition[] = [
+    //   {
+    //     id: "1",
+    //     tokenIn: tokenIns[0],
+    //     tokenOut: tokenOuts[0],
+    //     balanceIn: "1000",
+    //     balanceOut: "0.1",
+    //     amountDCA: "100",
+    //     intervalDCA: "600",
+    //     lastDCA: "0",
+    //     maxSlippage: "10",
+    //   },
+    // ]
 
     const goToAdd = () => {
       history.push("/add");
@@ -43,19 +47,19 @@ const Main = () => {
                   isPrimary isMono isBold fullWidth={false} padding="p-4 m-2"/>
             </div>
             <div className="bg-white rounded-lg px-4 py-2 m-2 flex flex-col">
-                {positions.length === 0 && 
+                {(positions.length === 0) && 
                   <div className="flex flex-col h-52">
                     <span className="font-mono self-center my-auto">
                       Your DCA positions will appear here.
                     </span>
                   </div>}
-                {positions.length > 0 && 
+                {positions && positions.length > 0 && 
                   <span className="font-mono py-2 mb-1">
                     Your DCA positions:
                   </span>}
-                {positions.map((position) => {
+                {positions && positions.map((position) => {
                   return (
-                    <div key={position.positionId} className="mb-5" onClick={() => goToDetail(position.positionId)}>
+                    <div key={position.id} className="mb-5" onClick={() => goToDetail(position.id)}>
                       <CardPosition position={position} />
                     </div>
                   );

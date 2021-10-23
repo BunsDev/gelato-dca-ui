@@ -13,7 +13,7 @@ const InputTokenAmount: React.FC<ButtonProps> = ({ token, value, placeholder="0.
       <div className="flex">
         <div className="shadow rounded-2xl bg-white px-3 py-2 flex items-center">
           <img src={token.imageUri} className="h-6 pr-2"/>
-          <span className="text-lg">{token.ticker}</span>
+          <span className="text-lg">{token.symbol}</span>
         </div>
         <input className="bg-gray-100 px-2 ml-auto text-right text-xl w-1/2 focus:outline-none" placeholder={placeholder}
           value={value}

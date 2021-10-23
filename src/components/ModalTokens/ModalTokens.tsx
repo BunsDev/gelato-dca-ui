@@ -26,10 +26,10 @@ const ModalTokens: React.FC<ModalTokensProps> = ({ isOpen, onDismiss, onSelect, 
           <div className="border-t border-gray-300 pt-2">
             {tokens.map((token) => {
               return (
-                <div key={token.ticker} className="p-2 rounded-xl hover:bg-gray-200 cursor-pointer flex items-center"
+                <div key={token.symbol} className="p-2 rounded-xl hover:bg-gray-200 cursor-pointer flex items-center"
                   onClick={() => handleSelect(token)}>
                   <img src={token.imageUri} className="h-6 pr-2"/>
-                  <div className="text-lg">{token.ticker}</div>
+                  <div className="text-lg">{token.symbol}</div>
                 </div>
               );
             })}

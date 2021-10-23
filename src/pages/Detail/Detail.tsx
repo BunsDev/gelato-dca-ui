@@ -4,15 +4,14 @@ import { DCAPosition, PositionTx } from "../../types";
 import { WEB3_DATA_TYPE } from "../../constants/web3";
 import { formatDateHumanize, getEtherscanUrl } from "../../utils/misc";
 import { useParams } from "react-router";
-import { tokenIns, tokenOuts } from "../../constants/tokens";
 import { useMemo, useState } from "react";
 import { BigNumber } from "@ethersproject/bignumber";
 import ModalClaim from "./components/ModalClaim/ModalClaim";
 import ModalDeposit from "./components/ModalDeposit/ModalDeposit";
 import ModalExit from "./components/ModalExit/ModalExit";
 import ModalWIthdraw from "./components/ModalWithdraw/ModalWithdraw";
-import { getPositionOfLineAndCharacter } from "typescript";
 import Button from "../../components/Button/Button";
+import { tokenIns, tokenOuts } from "../../constants/tokens";
 
 interface DetailParams {
   positionId: string
@@ -27,7 +26,7 @@ const Detail = () => {
   const [isOpenModalDeposit, setIsOpenModalDeposit] = useState<boolean>(false);
 
   const position: DCAPosition = {
-    positionId: positionId,
+    id: positionId,
     tokenIn: tokenIns[0],
     tokenOut: tokenOuts[0],
     balanceIn: "0.5",
@@ -80,9 +79,9 @@ const Detail = () => {
           <ButtonBack label="Back to Positions overview" />
           <div className="my-2 flex">
             <div className="py-3 px-1 font-bold text-2xl">
-              <img src={position.tokenOut.imageUri} className="h-7 pb-1 pr-1 inline"/>{position.tokenOut.ticker}
+              <img src={position.tokenOut.imageUri} className="h-7 pb-1 pr-1 inline"/>{position.tokenOut.symbol}
               <BsArrowRightShort className="inline pb-1 mx-1" size="28px"/> 
-              <img src={position.tokenIn.imageUri} className="h-7 pb-1 pr-1 inline"/>{position.tokenIn.ticker}
+              <img src={position.tokenIn.imageUri} className="h-7 pb-1 pr-1 inline"/>{position.tokenIn.symbol}
             </div>
             {/* TODO: CREATE COMPONENT IF NEEDED */}
             <button className="hover:bg-red-300 border-2 border-red-400 rounded-lg px-3 py-1 my-2 mr-2 font-mono text-red-500 ml-auto"
@@ -104,7 +103,7 @@ const Detail = () => {
                   </div>
                   <div className="mb-4">
                     <div className="text-md text-gray-500">DCA amount<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
-                    <div className="text-lg">{position.amountDCA} {position.tokenOut.ticker}</div>
+                    <div className="text-lg">{position.amountDCA} {position.tokenOut.symbol}</div>
                   </div>
                   <div>
                     <div className="text-md text-gray-500">DCA left</div>
@@ -131,7 +130,7 @@ const Detail = () => {
               <div className="bg-white rounded-lg p-4">
                 <div className="text-lg">Available Funds</div>
                 <div className="mt-3 flex justify-between">
-                  <span className="text-2xl font-bold">{position.balanceOut} {position.tokenOut.ticker}</span>
+                  <span className="text-2xl font-bold">{position.balanceOut} {position.tokenOut.symbol}</span>
                   <Button label="Withdraw" onClick={() => setIsOpenModalWithdraw(true)} 
                     isPrimary={false} isMono fullWidth={false} padding="px-3 py-1"/>
                 </div>
@@ -139,7 +138,7 @@ const Detail = () => {
               <div className="bg-white rounded-lg p-4 mt-3">
                 <div className="text-lg">Claimable</div>
                 <div className="mt-3 flex justify-between">
-                  <span className="text-2xl font-bold">{position.balanceIn} {position.tokenIn.ticker}</span>
+                  <span className="text-2xl font-bold">{position.balanceIn} {position.tokenIn.symbol}</span>
                   <Button label="Claim" onClick={() => setIsOpenModalClaim(true)} 
                     isPrimary={false} isMono fullWidth={false} padding="px-3 py-1"/>
                 </div>
