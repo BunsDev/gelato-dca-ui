@@ -17,6 +17,8 @@ export type DCAPosition = {
   tokenOut: Token
   balanceIn: string
   balanceOut: string
+  totalIn: string
+  totalOut: string
   amountDCA: string
   intervalDCA: string
   lastDCA: string

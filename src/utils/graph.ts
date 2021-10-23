@@ -28,6 +28,8 @@ export async function getPositions(
       }
       balanceIn
       balanceOut
+      totalIn
+      totalOut
       amountDCA
       intervalDCA
       lastDCA

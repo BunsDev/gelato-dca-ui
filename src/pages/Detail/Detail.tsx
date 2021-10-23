@@ -31,6 +31,8 @@ const Detail = () => {
     tokenOut: tokenOuts[0],
     balanceIn: "0.5",
     balanceOut: "1000",
+    totalIn: "0.5",
+    totalOut: "1000",
     amountDCA: "100",
     intervalDCA: "86400",
     lastDCA: "0",
