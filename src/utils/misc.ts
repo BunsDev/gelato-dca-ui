@@ -1,6 +1,6 @@
 import { ETHERSCAN_URL } from "../constants/endpoints";
 import { WEB3_DATA_TYPE } from "../constants/web3";
-import { formatDistance } from 'date-fns'
+import { format, formatDistance, fromUnixTime } from 'date-fns'
 import { formatUnits } from "ethers/lib/utils";
 import { tokenLogos } from "../constants/tokens";
 
@@ -17,8 +17,13 @@ export const getEtherscanUrl = (value: string, type: WEB3_DATA_TYPE): string => 
   return url;
 }
 
-export const formatDateHumanize = (duration: number): string => {
+export const formatDurationHumanize = (duration: number): string => {
   return formatDistance(0, duration * 1000, { includeSeconds: true });
+}
+
+export const formatDate = (timestamp: number, pattern="Pp O"): string => {
+  const date = fromUnixTime(timestamp)
+  return format(date, pattern);
 }
 
 export const formatToFixed = (amount: string, decimals: string, roundDecimals?: number): string => {

@@ -1,6 +1,7 @@
 import { DCAPosition } from "../../types";
 import { BsQuestionCircle, BsArrowRightShort } from "react-icons/bs";
-import { formatDateHumanize, formatToFixed, getTokenUri } from "../../utils/misc";
+import { formatDate, formatDurationHumanize, formatToFixed, getTokenUri } from "../../utils/misc";
+import { useMemo } from "react";
 
 interface CardPositionProps {
   position: DCAPosition;
@@ -9,6 +10,24 @@ interface CardPositionProps {
 const CardPosition: React.FC<CardPositionProps> = ({ position }) => {
   const {tokenIn, tokenOut, balanceIn, balanceOut, totalOut, amountDCA, lastDCA, intervalDCA} = position;
 
+  const nextDCA = useMemo(() => {
+    const timestamp = parseInt(lastDCA) + parseInt(intervalDCA);
+    return timestamp;
+  }, [lastDCA, intervalDCA]);
+
+  const labelNextDCA = useMemo(() => {
+    if (amountDCA > balanceIn) {
+      return "Not enough fund";
+    }
+    
+    const now = Math.floor(Date.now() / 1000)
+    if (nextDCA < now) {
+      return "Executing DCA";
+    } else {
+      return formatDate(nextDCA);
+    }
+  }, [nextDCA, balanceIn, amountDCA]);
+  
   return (
     <div className="bg-white shadow-md hover:bg-gray-100 border-2 border-red-300 rounded-md p-3 cursor-pointer">
       <div className="flex py-1">
@@ -37,14 +56,12 @@ const CardPosition: React.FC<CardPositionProps> = ({ position }) => {
         </div>
         <div className="py-1">
           <div className="text-sm">DCA interval<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>  
-          <div className="font-bold">{formatDateHumanize(parseInt(intervalDCA))}</div>
+          <div className="font-bold">{formatDurationHumanize(parseInt(intervalDCA))}</div>
         </div>
         <div className="py-1">
-          <div className="text-sm">Next DCA in</div>  
+          <div className="text-sm">Next DCA at</div>  
           <div className="font-bold">
-            24:20:20
-            {/* <span className="text-blue-600">Executing DCA</span> */}
-            {/* <span className="text-red-500">Not enough fund</span> */}
+            {labelNextDCA}
           </div>
         </div>
       </div>

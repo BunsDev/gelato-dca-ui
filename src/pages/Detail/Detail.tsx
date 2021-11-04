@@ -2,7 +2,7 @@ import { BsInfoCircle, BsQuestionCircle, BsArrowRightShort } from "react-icons/b
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import { DCAPosition, PositionTx } from "../../types";
 import { WEB3_DATA_TYPE } from "../../constants/web3";
-import { formatDateHumanize, getEtherscanUrl } from "../../utils/misc";
+import { formatDurationHumanize, getEtherscanUrl } from "../../utils/misc";
 import { useParams } from "react-router";
 import { useMemo, useState } from "react";
 import { BigNumber } from "@ethersproject/bignumber";
@@ -68,12 +68,12 @@ const Detail = () => {
   ];
 
   const interval = useMemo(() => {
-    return `every ${formatDateHumanize(parseInt(position.intervalDCA))}`
-  }, [formatDateHumanize, position]);
+    return `every ${formatDurationHumanize(parseInt(position.intervalDCA))}`
+  }, [formatDurationHumanize, position]);
 
   const numOfDca = useMemo(() => {
     return BigNumber.from(position.balanceOut).div(BigNumber.from(position.amountDCA)).toString();
-  }, [formatDateHumanize, position]);
+  }, [formatDurationHumanize, position]);
 
   return (
     <div className="w-full flex">
