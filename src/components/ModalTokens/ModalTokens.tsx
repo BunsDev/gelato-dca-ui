@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import { Token } from "../../types";
+import { getTokenUri } from "../../utils/misc";
 import Modal from "../Modal/Modal";
 
 interface ModalTokensProps {
@@ -28,7 +29,7 @@ const ModalTokens: React.FC<ModalTokensProps> = ({ isOpen, onDismiss, onSelect, 
               return (
                 <div key={token.symbol} className="p-2 rounded-xl hover:bg-gray-200 cursor-pointer flex items-center"
                   onClick={() => handleSelect(token)}>
-                  <img src={token.imageUri} className="h-6 pr-2"/>
+                  <img src={getTokenUri(token.id)} className="h-6 pr-2"/>
                   <div className="text-lg">{token.symbol}</div>
                 </div>
               );

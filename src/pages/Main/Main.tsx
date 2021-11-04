@@ -1,8 +1,6 @@
 import CardPosition from "../../components/CardPosition/CardPosition";
-import { DCAPosition } from "../../types";
 import { useHistory } from "react-router-dom";
 import { GUIDEBOOK_URL } from "../../constants/endpoints";
-import { tokenIns, tokenOuts } from "../../constants/tokens";
 import Button from "../../components/Button/Button";
 import { usePositions } from "../../hooks/usePositions";
 import useEthereum from "../../hooks/useEthereum";
@@ -11,20 +9,6 @@ const Main = () => {
     const history = useHistory();
     const { accountAddress } = useEthereum();
     const { positions, isLoading } = usePositions(accountAddress);
-
-    // const positions: DCAPosition[] = [
-    //   {
-    //     id: "1",
-    //     tokenIn: tokenIns[0],
-    //     tokenOut: tokenOuts[0],
-    //     balanceIn: "1000",
-    //     balanceOut: "0.1",
-    //     amountDCA: "100",
-    //     intervalDCA: "600",
-    //     lastDCA: "0",
-    //     maxSlippage: "10",
-    //   },
-    // ]
 
     const goToAdd = () => {
       history.push("/add");

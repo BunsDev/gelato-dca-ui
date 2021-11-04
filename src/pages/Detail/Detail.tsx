@@ -9,9 +9,8 @@ import { BigNumber } from "@ethersproject/bignumber";
 import ModalClaim from "./components/ModalClaim/ModalClaim";
 import ModalDeposit from "./components/ModalDeposit/ModalDeposit";
 import ModalExit from "./components/ModalExit/ModalExit";
-import ModalWIthdraw from "./components/ModalWithdraw/ModalWithdraw";
+import ModalWithdraw from "./components/ModalWithdraw/ModalWithdraw";
 import Button from "../../components/Button/Button";
-import { tokenIns, tokenOuts } from "../../constants/tokens";
 import { getPosition } from "../../utils/graph";
 
 interface DetailParams {
@@ -219,12 +218,12 @@ const Detail = () => {
               amountIn={position.balanceIn} 
               amountOut={position.balanceOut}/>
             <ModalDeposit isOpen={isOpenModalDeposit} onDismiss={() => setIsOpenModalDeposit(false)} onSubmit={() => {}} 
-              maxAmount={"10000"} token={position.tokenOut}/>
-            <ModalWIthdraw isOpen={isOpenModalWithdraw} onDismiss={() => setIsOpenModalWithdraw(false)} onSubmit={() => {}} 
-              maxAmount={position.balanceIn} token={position.tokenOut}/>
+              maxAmount={"10000"} token={position.tokenIn}/>
+            <ModalWithdraw isOpen={isOpenModalWithdraw} onDismiss={() => setIsOpenModalWithdraw(false)} onSubmit={() => {}} 
+              maxAmount={position.balanceIn} token={position.tokenIn}/>
             <ModalClaim isOpen={isOpenModalClaim} onDismiss={() => setIsOpenModalClaim(false)} onSubmit={() => {}}
-              amount="0.1"
-              token={position.tokenIn}/>
+              amount="1"
+              token={position.tokenOut}/>
           </>
         )}
     </div>  

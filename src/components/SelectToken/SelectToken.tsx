@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BsChevronDown } from "react-icons/bs";
 import { Token } from "../../types";
+import { getTokenUri } from "../../utils/misc";
 import ModalTokens from "../ModalTokens/ModalTokens";
 
 interface SelectTokenProps {
@@ -17,7 +18,7 @@ const SelectToken: React.FC<SelectTokenProps> = ({ token, tokens, onSelect }) =>
         <div className="border border-gray-300 rounded-full hover:bg-gray-200 px-4 py-2 mt-1 cursor-pointer flex items-center"
           onClick={() => setIsOpenModal(true)}>
           {token && <div className="flex items-center">
-              <img src={token.imageUri} className="h-6 pr-2"/>
+              <img src={getTokenUri(token.id)} className="h-6 pr-2"/>
               <div className="text-lg">{token.symbol}</div>
             </div>}
           {!token && <div className="flex">
