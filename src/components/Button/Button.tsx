@@ -42,7 +42,7 @@ const Button: React.FC<ButtonProps> = ({ label, isPrimary=true, isBold=false, is
     classes += ` ${padding} ${fontSize}`;
 
     return classes;
-  }, [isPrimary, isBold, isMono, fontSize]);
+  }, [isPrimary, isBold, isMono, fontSize, fullWidth, padding]);
   
   return (
     <button className={className} onClick={onClick}>

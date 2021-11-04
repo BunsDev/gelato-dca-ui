@@ -22,7 +22,7 @@ const ModalWithdraw: React.FC<ModalWithdrawProps> = ({ isOpen, onDismiss, onSubm
 
     const handleSubmit = useCallback(() => {
       onSubmit(amount);
-    }, [onSubmit]);
+    }, [onSubmit, amount]);
     
     const handleSetAmount = (value: string) => {
       setAmount(cleanInputNumber(value));

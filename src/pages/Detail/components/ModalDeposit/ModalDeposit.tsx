@@ -22,7 +22,7 @@ const ModalDeposit: React.FC<ModalDepositProps> = ({ isOpen, onDismiss, onSubmit
 
     const handleSubmit = useCallback(() => {
       onSubmit(amount);
-    }, [onSubmit]);
+    }, [onSubmit, amount]);
     
     const handleSetAmount = (value: string) => {
       setAmount(cleanInputNumber(value));

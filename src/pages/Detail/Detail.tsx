@@ -68,7 +68,7 @@ const Detail = () => {
   const interval = useMemo(() => {
     if (!position) return "-";
     return `${formatDurationHumanize(parseInt(position.intervalDCA))}`
-  }, [formatDurationHumanize, position]);
+  }, [position]);
 
   const dcaAmount = useMemo(() => {
     if (!position) return "-";
@@ -91,11 +91,11 @@ const Detail = () => {
     return `${formatToFixed(position.balanceOut, position.tokenOut.decimals)} ${position.tokenOut.symbol}`;
   }, [position]);
 
-  const totalSpent = useMemo(() => {
-    if (!position) return "-";
-    const spent = BigNumber.from(position.totalIn).sub(BigNumber.from(position.balanceIn))
-    return `${formatToFixed(spent.toString(), position.tokenIn.decimals)} ${position.tokenIn.symbol}`;
-  }, [position]);
+  // const totalSpent = useMemo(() => {
+  //   if (!position) return "-";
+  //   const spent = BigNumber.from(position.totalIn).sub(BigNumber.from(position.balanceIn))
+  //   return `${formatToFixed(spent.toString(), position.tokenIn.decimals)} ${position.tokenIn.symbol}`;
+  // }, [position]);
 
   const totalBought = useMemo(() => {
     if (!position) return "-";

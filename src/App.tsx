@@ -9,7 +9,6 @@ import Main from "./pages/Main/Main";
 import Logo from "./assets/dango-placeholder.png";
 import Create from "./pages/Create/Create";
 import Detail from "./pages/Detail/Detail";
-import Button from "./components/Button/Button";
 import Web3Account from "./components/Web3Account/Web3Account";
 import { EthereumProvider } from "./contexts/Ethereum";
 
