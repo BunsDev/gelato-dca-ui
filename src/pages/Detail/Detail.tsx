@@ -2,9 +2,9 @@ import { BsInfoCircle, BsQuestionCircle, BsArrowRightShort } from "react-icons/b
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import { DCAPosition, PositionTx } from "../../types";
 import { WEB3_DATA_TYPE } from "../../constants/web3";
-import { formatDurationHumanize, getEtherscanUrl } from "../../utils/misc";
+import { formatDate, formatDurationHumanize, formatToFixed, getEtherscanUrl, getTokenUri } from "../../utils/misc";
 import { useParams } from "react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BigNumber } from "@ethersproject/bignumber";
 import ModalClaim from "./components/ModalClaim/ModalClaim";
 import ModalDeposit from "./components/ModalDeposit/ModalDeposit";
@@ -12,6 +12,7 @@ import ModalExit from "./components/ModalExit/ModalExit";
 import ModalWIthdraw from "./components/ModalWithdraw/ModalWithdraw";
 import Button from "../../components/Button/Button";
 import { tokenIns, tokenOuts } from "../../constants/tokens";
+import { getPosition } from "../../utils/graph";
 
 interface DetailParams {
   positionId: string
@@ -20,24 +21,12 @@ interface DetailParams {
 const Detail = () => {
   let { positionId } = useParams<DetailParams>();
 
+  const [position, setPosition] = useState<DCAPosition | null>();
+
   const [isOpenModalExit, setIsOpenModalExit] = useState<boolean>(false);
   const [isOpenModalWithdraw, setIsOpenModalWithdraw] = useState<boolean>(false);
   const [isOpenModalClaim, setIsOpenModalClaim] = useState<boolean>(false);
   const [isOpenModalDeposit, setIsOpenModalDeposit] = useState<boolean>(false);
-
-  const position: DCAPosition = {
-    id: positionId,
-    tokenIn: tokenIns[0],
-    tokenOut: tokenOuts[0],
-    balanceIn: "0.5",
-    balanceOut: "1000",
-    totalIn: "0.5",
-    totalOut: "1000",
-    amountDCA: "100",
-    intervalDCA: "86400",
-    lastDCA: "0",
-    maxSlippage: "10"
-  };
 
   const transactions: PositionTx[] = [
     {
@@ -67,13 +56,58 @@ const Detail = () => {
     },
   ];
 
+  useEffect(() => {
+    const fetchPosition = async () => {
+      const position = await getPosition(positionId);
+
+      setPosition(position);
+    }
+
+    fetchPosition();
+  }, [positionId]);
+
   const interval = useMemo(() => {
-    return `every ${formatDurationHumanize(parseInt(position.intervalDCA))}`
+    if (!position) return "-";
+    return `${formatDurationHumanize(parseInt(position.intervalDCA))}`
   }, [formatDurationHumanize, position]);
 
-  const numOfDca = useMemo(() => {
-    return BigNumber.from(position.balanceOut).div(BigNumber.from(position.amountDCA)).toString();
-  }, [formatDurationHumanize, position]);
+  const dcaAmount = useMemo(() => {
+    if (!position) return "-";
+    return `${formatToFixed(position.amountDCA, position.tokenIn.decimals)} ${position.tokenIn.symbol}`;
+  }, [position]);
+
+  const dcaLeft = useMemo(() => {
+    if (!position) return "-";
+    const times = BigNumber.from(position.balanceOut).div(BigNumber.from(position.amountDCA)).toString();
+    return `${times} times`;
+  }, [position]);
+
+  const availableFund = useMemo(() => {
+    if (!position) return "-";
+    return `${formatToFixed(position.balanceIn, position.tokenIn.decimals)} ${position.tokenIn.symbol}`;
+  }, [position]);
+
+  const claimable = useMemo(() => {
+    if (!position) return "-";
+    return `${formatToFixed(position.balanceOut, position.tokenOut.decimals)} ${position.tokenOut.symbol}`;
+  }, [position]);
+
+  const totalSpent = useMemo(() => {
+    if (!position) return "-";
+    const spent = BigNumber.from(position.totalIn).sub(BigNumber.from(position.balanceIn))
+    return `${formatToFixed(spent.toString(), position.tokenIn.decimals)} ${position.tokenIn.symbol}`;
+  }, [position]);
+
+  const totalBought = useMemo(() => {
+    if (!position) return "-";
+    return `${formatToFixed(position.totalOut, position.tokenOut.decimals)} ${position.tokenOut.symbol}`;
+  }, [position]);
+
+  const nextDCA = useMemo(() => {
+    if (!position) return "-";
+    const timestamp = parseInt(position.lastDCA) + parseInt(position.intervalDCA);
+    return `${formatDate(timestamp)}`;
+  }, [position]);
 
   return (
     <div className="w-full flex">
@@ -81,11 +115,15 @@ const Detail = () => {
           <ButtonBack label="Back to Positions overview" />
           <div className="my-2 flex">
             <div className="py-3 px-1 font-bold text-2xl">
-              <img src={position.tokenOut.imageUri} className="h-7 pb-1 pr-1 inline"/>{position.tokenOut.symbol}
-              <BsArrowRightShort className="inline pb-1 mx-1" size="28px"/> 
-              <img src={position.tokenIn.imageUri} className="h-7 pb-1 pr-1 inline"/>{position.tokenIn.symbol}
+              {position && (
+                <>
+                  <img src={getTokenUri(position.tokenIn.id)} className="h-7 pb-1 pr-1 inline"/>{position.tokenIn.symbol}
+                  <BsArrowRightShort className="inline pb-1 mx-1" size="28px"/> 
+                  <img src={getTokenUri(position.tokenOut.id)} className="h-7 pb-1 pr-1 inline"/>{position.tokenOut.symbol}
+                </>
+              )}
+              {!position && <span>...</span>}
             </div>
-            {/* TODO: CREATE COMPONENT IF NEEDED */}
             <button className="hover:bg-red-300 border-2 border-red-400 rounded-lg px-3 py-1 my-2 mr-2 font-mono text-red-500 ml-auto"
               onClick={() => setIsOpenModalExit(true)}>
               Exit Position
@@ -105,34 +143,32 @@ const Detail = () => {
                   </div>
                   <div className="mb-4">
                     <div className="text-md text-gray-500">DCA amount<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
-                    <div className="text-lg">{position.amountDCA} {position.tokenOut.symbol}</div>
-                  </div>
-                  <div>
-                    <div className="text-md text-gray-500">DCA left</div>
-                    <div className="text-lg">{numOfDca} times<BsInfoCircle className="inline pl-1 pb-1" size="16px"/></div>
+                    <div className="text-lg">
+                      {dcaAmount}
+                    </div>
                   </div>
                 </div>
                 <div>
                   <div className="mb-4">
-                    <div className="text-md text-gray-500">Total spent</div>
-                    <div className="text-lg">350 USDC</div>
+                    <div className="text-md text-gray-500">Total bought</div>
+                    <div className="text-lg">{totalBought}</div>
                   </div>
                   <div className="mb-4">
-                    <div className="text-md text-gray-500">Total bought</div>
-                    <div className="text-lg">0.6 ETH</div>
-                  </div>
-                  <div>
-                    <div className="text-md text-gray-500">Next DCA in</div>
-                    <div className="text-lg">12:00:10</div>
+                    <div className="text-md text-gray-500">DCA left</div>
+                    <div className="text-lg">{dcaLeft}<BsInfoCircle className="inline pl-1 pb-1" size="16px"/></div>
                   </div>
                 </div>
+              </div>
+              <div>
+                <div className="text-md text-gray-500">Next DCA at</div>
+                <div className="text-lg">{nextDCA}</div>
               </div>
             </div>
             <div className="col-span-3">
               <div className="bg-white rounded-lg p-4">
                 <div className="text-lg">Available Funds</div>
                 <div className="mt-3 flex justify-between">
-                  <span className="text-2xl font-bold">{position.balanceOut} {position.tokenOut.symbol}</span>
+                  <span className="text-2xl font-bold">{availableFund}</span>
                   <Button label="Withdraw" onClick={() => setIsOpenModalWithdraw(true)} 
                     isPrimary={false} isMono fullWidth={false} padding="px-3 py-1"/>
                 </div>
@@ -140,7 +176,7 @@ const Detail = () => {
               <div className="bg-white rounded-lg p-4 mt-3">
                 <div className="text-lg">Claimable</div>
                 <div className="mt-3 flex justify-between">
-                  <span className="text-2xl font-bold">{position.balanceIn} {position.tokenIn.symbol}</span>
+                  <span className="text-2xl font-bold">{claimable}</span>
                   <Button label="Claim" onClick={() => setIsOpenModalClaim(true)} 
                     isPrimary={false} isMono fullWidth={false} padding="px-3 py-1"/>
                 </div>
@@ -175,18 +211,22 @@ const Detail = () => {
             </table>
           </div>
         </div>
-        <ModalExit isOpen={isOpenModalExit} onDismiss={() => setIsOpenModalExit(false)} onSubmit={() => {}} 
-          tokenIn={position.tokenIn} 
-          tokenOut={position.tokenOut} 
-          amountIn={position.balanceIn} 
-          amountOut={position.balanceOut}/>
-        <ModalDeposit isOpen={isOpenModalDeposit} onDismiss={() => setIsOpenModalDeposit(false)} onSubmit={() => {}} 
-          maxAmount={"10000"} token={position.tokenOut}/>
-        <ModalWIthdraw isOpen={isOpenModalWithdraw} onDismiss={() => setIsOpenModalWithdraw(false)} onSubmit={() => {}} 
-          maxAmount={position.balanceIn} token={position.tokenOut}/>
-        <ModalClaim isOpen={isOpenModalClaim} onDismiss={() => setIsOpenModalClaim(false)} onSubmit={() => {}}
-          amount="0.1"
-          token={position.tokenIn}/>
+        {position && (
+          <>
+            <ModalExit isOpen={isOpenModalExit} onDismiss={() => setIsOpenModalExit(false)} onSubmit={() => {}} 
+              tokenIn={position.tokenIn} 
+              tokenOut={position.tokenOut} 
+              amountIn={position.balanceIn} 
+              amountOut={position.balanceOut}/>
+            <ModalDeposit isOpen={isOpenModalDeposit} onDismiss={() => setIsOpenModalDeposit(false)} onSubmit={() => {}} 
+              maxAmount={"10000"} token={position.tokenOut}/>
+            <ModalWIthdraw isOpen={isOpenModalWithdraw} onDismiss={() => setIsOpenModalWithdraw(false)} onSubmit={() => {}} 
+              maxAmount={position.balanceIn} token={position.tokenOut}/>
+            <ModalClaim isOpen={isOpenModalClaim} onDismiss={() => setIsOpenModalClaim(false)} onSubmit={() => {}}
+              amount="0.1"
+              token={position.tokenIn}/>
+          </>
+        )}
     </div>  
   );
 };

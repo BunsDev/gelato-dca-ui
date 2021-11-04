@@ -52,7 +52,7 @@ const CardPosition: React.FC<CardPositionProps> = ({ position }) => {
         </div>
         <div className="py-1">
           <div className="text-sm">DCA amount<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>  
-          <div className="font-bold">{formatToFixed(amountDCA, tokenOut.decimals)} {tokenIn.symbol}</div>
+          <div className="font-bold">{formatToFixed(amountDCA, tokenIn.decimals)} {tokenIn.symbol}</div>
         </div>
         <div className="py-1">
           <div className="text-sm">DCA interval<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>  

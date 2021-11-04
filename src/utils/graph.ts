@@ -45,6 +45,45 @@ export async function getPositions(
   }
 }
 
+export async function getPosition(
+  positionId: string,
+  errorCallback: Function = () => {},
+): Promise<DCAPosition | null> {
+  const query = `
+  {
+    position(id: "${positionId}") {
+      id
+      tokenIn {
+        id
+        symbol
+        name
+        decimals
+      }
+      tokenOut {
+        id
+        symbol
+        name
+        decimals
+      }
+      balanceIn
+      balanceOut
+      totalIn
+      totalOut
+      amountDCA
+      intervalDCA
+      lastDCA
+      maxSlippage
+    }
+  }`
+  try {
+    const response = await postQuery(GRAPH_URL, query)
+    return response.data.position
+  } catch (error) {
+    errorCallback(error)
+    return null
+  }
+}
+
 const postQuery = async (endpoint: string, query: string) => {
   const options = {
     method: 'POST',
