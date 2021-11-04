@@ -1,13 +1,13 @@
 import { DCAPosition } from "../../types";
 import { BsQuestionCircle, BsArrowRightShort } from "react-icons/bs";
-import { formatToFixed, getTokenUri } from "../../utils/misc";
+import { formatDateHumanize, formatToFixed, getTokenUri } from "../../utils/misc";
 
 interface CardPositionProps {
   position: DCAPosition;
 }
 
 const CardPosition: React.FC<CardPositionProps> = ({ position }) => {
-  const {tokenIn, tokenOut, balanceIn, balanceOut, amountDCA, lastDCA, intervalDCA} = position;
+  const {tokenIn, tokenOut, balanceIn, balanceOut, totalOut, amountDCA, lastDCA, intervalDCA} = position;
 
   return (
     <div className="bg-white shadow-md hover:bg-gray-100 border-2 border-red-300 rounded-md p-3 cursor-pointer">
@@ -25,7 +25,7 @@ const CardPosition: React.FC<CardPositionProps> = ({ position }) => {
         </div>
         <div className="py-1">
           <div className="text-sm">Total bought</div>  
-          <div className="font-bold">4 ETH</div>
+          <div className="font-bold">{formatToFixed(totalOut, tokenOut.decimals)} {tokenOut.symbol}</div>
         </div>
         <div className="py-1">
           <div className="text-sm">Claimable</div>  
@@ -37,7 +37,7 @@ const CardPosition: React.FC<CardPositionProps> = ({ position }) => {
         </div>
         <div className="py-1">
           <div className="text-sm">DCA interval<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>  
-          <div className="font-bold">24 Hours</div>
+          <div className="font-bold">{formatDateHumanize(parseInt(intervalDCA))}</div>
         </div>
         <div className="py-1">
           <div className="text-sm">Next DCA in</div>  
