@@ -34,14 +34,6 @@ export async function getPositions(
       intervalDCA
       lastDCA
       maxSlippage
-      transactions {
-        id
-        hash
-        action
-        timestamp
-        amountIn
-        amountOut
-      }
     }
   }`
   try {
@@ -81,6 +73,14 @@ export async function getPosition(
       intervalDCA
       lastDCA
       maxSlippage
+      transactions {
+        id
+        hash
+        action
+        timestamp
+        amountIn
+        amountOut
+      }
     }
   }`
   try {

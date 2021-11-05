@@ -12,6 +12,7 @@ import ModalExit from "./components/ModalExit/ModalExit";
 import ModalWithdraw from "./components/ModalWithdraw/ModalWithdraw";
 import Button from "../../components/Button/Button";
 import { getPosition } from "../../utils/graph";
+import TableTransactions from "./components/TableTransactions/TableTransactions";
 
 interface DetailParams {
   positionId: string
@@ -27,33 +28,33 @@ const Detail = () => {
   const [isOpenModalClaim, setIsOpenModalClaim] = useState<boolean>(false);
   const [isOpenModalDeposit, setIsOpenModalDeposit] = useState<boolean>(false);
 
-  const transactions: PositionTx[] = [
-    {
-      action: "DCA 0.1 ETH with 100 USDC",
-      timestamp: "2 minutes ago",
-      txHash: "0xc4036389f...7d30"
-    },
-    {
-      action: "DCA 0.1 ETH with 100 USDC",
-      timestamp: "12 minutes ago",
-      txHash: "0xc4036389f...6d54"
-    },
-    {
-      action: "Claim 0.5 ETH",
-      timestamp: "4 hours ago",
-      txHash: "0xc4036389f...422c"
-    },
-    {
-      action: "Add 500 USDC",
-      timestamp: "5 hours ago",
-      txHash: "0xc4036389f...420c"
-    },
-    {
-      action: "Open position with 1,000 USDC",
-      timestamp: "2 days ago",
-      txHash: "0xc4036389f...7d30"
-    },
-  ];
+  // const transactions: PositionTx[] = [
+  //   {
+  //     action: "DCA 0.1 ETH with 100 USDC",
+  //     timestamp: "2 minutes ago",
+  //     txHash: "0xc4036389f...7d30"
+  //   },
+  //   {
+  //     action: "DCA 0.1 ETH with 100 USDC",
+  //     timestamp: "12 minutes ago",
+  //     txHash: "0xc4036389f...6d54"
+  //   },
+  //   {
+  //     action: "Claim 0.5 ETH",
+  //     timestamp: "4 hours ago",
+  //     txHash: "0xc4036389f...422c"
+  //   },
+  //   {
+  //     action: "Add 500 USDC",
+  //     timestamp: "5 hours ago",
+  //     txHash: "0xc4036389f...420c"
+  //   },
+  //   {
+  //     action: "Open position with 1,000 USDC",
+  //     timestamp: "2 days ago",
+  //     txHash: "0xc4036389f...7d30"
+  //   },
+  // ];
 
   useEffect(() => {
     const fetchPosition = async () => {
@@ -106,6 +107,11 @@ const Detail = () => {
     if (!position) return "-";
     const timestamp = parseInt(position.lastDCA) + parseInt(position.intervalDCA);
     return `${formatDate(timestamp)}`;
+  }, [position]);
+
+  const transactions = useMemo(() => {
+    if (!position) return null;
+    return position.transactions.slice().reverse();
   }, [position]);
 
   return (
@@ -184,7 +190,7 @@ const Detail = () => {
           </div>
           <div className="bg-white rounded-lg p-4 mt-3 font-mono">
             <div className="text-lg">History</div>
-            <table className="table-auto w-full mt-3">
+            {/* <table className="table-auto w-full mt-3">
               <thead>
                 <tr>
                   <th className="text-left">Action</th>
@@ -207,7 +213,8 @@ const Detail = () => {
                   );
                 })}
               </tbody>
-            </table>
+            </table> */}
+            {position !== null && <TableTransactions transactions={transactions ?? []} position={position!}/>}
           </div>
         </div>
         {position && (
