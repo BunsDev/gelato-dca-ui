@@ -1,8 +1,7 @@
 import { BsInfoCircle, BsQuestionCircle, BsArrowRightShort } from "react-icons/bs";
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
-import { DCAPosition, PositionTx } from "../../types";
-import { WEB3_DATA_TYPE } from "../../constants/web3";
-import { formatDate, formatDurationHumanize, formatToFixed, getEtherscanUrl, getTokenUri } from "../../utils/misc";
+import { DCAPosition } from "../../types";
+import { formatDate, formatDurationHumanize, formatToFixed, getTokenUri } from "../../utils/misc";
 import { useParams } from "react-router";
 import { useEffect, useMemo, useState } from "react";
 import { BigNumber } from "@ethersproject/bignumber";
@@ -27,34 +26,6 @@ const Detail = () => {
   const [isOpenModalWithdraw, setIsOpenModalWithdraw] = useState<boolean>(false);
   const [isOpenModalClaim, setIsOpenModalClaim] = useState<boolean>(false);
   const [isOpenModalDeposit, setIsOpenModalDeposit] = useState<boolean>(false);
-
-  // const transactions: PositionTx[] = [
-  //   {
-  //     action: "DCA 0.1 ETH with 100 USDC",
-  //     timestamp: "2 minutes ago",
-  //     txHash: "0xc4036389f...7d30"
-  //   },
-  //   {
-  //     action: "DCA 0.1 ETH with 100 USDC",
-  //     timestamp: "12 minutes ago",
-  //     txHash: "0xc4036389f...6d54"
-  //   },
-  //   {
-  //     action: "Claim 0.5 ETH",
-  //     timestamp: "4 hours ago",
-  //     txHash: "0xc4036389f...422c"
-  //   },
-  //   {
-  //     action: "Add 500 USDC",
-  //     timestamp: "5 hours ago",
-  //     txHash: "0xc4036389f...420c"
-  //   },
-  //   {
-  //     action: "Open position with 1,000 USDC",
-  //     timestamp: "2 days ago",
-  //     txHash: "0xc4036389f...7d30"
-  //   },
-  // ];
 
   useEffect(() => {
     const fetchPosition = async () => {
@@ -190,30 +161,6 @@ const Detail = () => {
           </div>
           <div className="bg-white rounded-lg p-4 mt-3 font-mono">
             <div className="text-lg">History</div>
-            {/* <table className="table-auto w-full mt-3">
-              <thead>
-                <tr>
-                  <th className="text-left">Action</th>
-                  <th className="text-right">Time</th>
-                  <th className="text-right">Tx Hash</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transactions.map((tx) => {
-                  return (
-                    <tr key={tx.txHash}>
-                      <td>{tx.action}</td>
-                      <td className="text-right">{tx.timestamp}</td>
-                      <td className="text-right">
-                        <a href={getEtherscanUrl(tx.txHash, WEB3_DATA_TYPE.Tx)} className="underline" target="_blank" rel="noreferrer">
-                          {tx.txHash}↗
-                        </a>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table> */}
             {position !== null && <TableTransactions transactions={transactions ?? []} position={position!}/>}
           </div>
         </div>
