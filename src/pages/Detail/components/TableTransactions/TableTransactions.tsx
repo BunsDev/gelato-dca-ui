@@ -9,11 +9,11 @@ interface TableTransactionsProps {
 }
 
 const TableTransactions: React.FC<TableTransactionsProps> = ({ transactions, position }) => {
-    const {tokenIn, tokenOut} = position;
     const now = Math.floor(Date.now() / 1000)
 
     const description = (transaction: Transaction) => {
-      console.log(transaction.action, Action.CREATE_POSITION)
+      // TODO: REFACTOR
+      const {tokenIn, tokenOut} = position;
       if (transaction.action === Action.CREATE_POSITION) {
         return `Open position`
       } else if (transaction.action === Action.UPDATE_POSITION) {
