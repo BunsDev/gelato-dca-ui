@@ -1,19 +1,24 @@
 import { BigNumber } from "ethers/lib/ethers";
 import { useMemo, useState } from "react";
-import { BsArrowRightShort, BsQuestionCircle } from "react-icons/bs";
+import { BsQuestionCircle } from "react-icons/bs";
 import Button from "../../components/Button/Button";
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import InputTokenAmount from "../../components/InputTokenAmount/InputTokenAmount";
 import SelectPeriod from "../../components/SelectPeriod/SelectPeriod";
-import SelectToken from "../../components/SelectToken/SelectToken";
+import SelectTokenPair from "../../components/SelectTokenPair/SelectTokenPair";
 import { IntervalPeriod } from "../../constants/misc";
-import { tokenIns, tokenOuts } from "../../constants/tokens";
-import { Token } from "../../types";
+import { useTokenPairs } from "../../hooks/useTokenPairs";
+import { TokenPair } from "../../types";
 import { cleanInputNumber } from "../../utils/validation";
 
 const Create = () => {
-    const [tokenOut, setTokenOut] = useState<Token>(tokenOuts[0]);
-    const [tokenIn, setTokenIn] = useState<Token>();
+    const {tokenPairs} = useTokenPairs();
+    const [tokenPair, setTokenPair] = useState<TokenPair>();
+    const tokenIn = tokenPair?.token1;
+    const tokenOut = tokenPair?.token2;
+    
+    // const [tokenOut, setTokenOut] = useState<Token>(tokenOuts[0]);
+    // const [tokenIn, setTokenIn] = useState<Token>();
     const [funds, setFunds] = useState<string>("");
     const [dcaAmount, setDcaAmount] = useState<string>("");
     const [valueInterval, setValueInterval] = useState<string>("1");
@@ -29,15 +34,16 @@ const Create = () => {
     }, [funds, dcaAmount]);
 
     const isInputValid = useMemo(() => {
-      if (funds.length === 0 || dcaAmount.length === 0 || !tokenOut || !tokenIn || !periodInterval) {
+      if (funds.length === 0 || dcaAmount.length === 0 || !tokenPair || !periodInterval) {
         return false;
       }
       return true;
-    }, [funds, tokenOut, tokenIn, dcaAmount, periodInterval])
+    }, [funds, tokenPair, dcaAmount, periodInterval])
     
     const confirmationText = useMemo(() => {
-      let text = `Depositing ${funds} ${tokenOut.symbol}`;
-      text += ` to buy ${dcaAmount} ${tokenOut.symbol} worth of ${tokenIn?.symbol}`;
+      if (!tokenPair) return "-";
+      let text = `Depositing ${funds} ${tokenIn!.symbol}`;
+      text += ` to buy ${dcaAmount} ${tokenOut!.symbol} worth of ${tokenIn!.symbol}`;
 
       let interval = "";
       if (valueInterval.length > 0 && valueInterval !== "1" && valueInterval !== "0") {
@@ -56,15 +62,19 @@ const Create = () => {
 
       text += ` every ${interval}.`;
       return text;
-    }, [funds, tokenOut, tokenIn, dcaAmount, valueInterval, periodInterval])
+    }, [funds, tokenPair, dcaAmount, valueInterval, periodInterval])
 
-    const handleSelectTokenOut = (token: Token) => {
-      setTokenOut(token);
+    const handleSelectTokenPair = (tokenPair: TokenPair) => {
+      setTokenPair(tokenPair);
     }
 
-    const handleSelectTokenIn = (token: Token) => {
-      setTokenIn(token);
-    }
+    // const handleSelectTokenOut = (token: Token) => {
+    //   setTokenOut(token);
+    // }
+
+    // const handleSelectTokenIn = (token: Token) => {
+    //   setTokenIn(token);
+    // }
 
     const handleSetFunds = (value: string) => {
       setFunds(cleanInputNumber(value));
@@ -99,7 +109,12 @@ const Create = () => {
                 Open DCA Position
               </div>
               <div className="flex mt-4 items-center">
-                <div className="w-2/5">
+                <div className="w-3/5">
+                  <div className="text-md font-bold">DCA Pair</div>
+                  <SelectTokenPair tokenPair={tokenPair} tokenPairs={tokenPairs} onSelect={handleSelectTokenPair}/>
+                  {/* <SelectToken token={tokenOut} tokens={tokenOuts} onSelect={handleSelectTokenOut}/> */}
+                </div>
+                {/* <div className="w-2/5">
                   <div className="text-md font-bold">Token to Send</div>
                   <SelectToken token={tokenOut} tokens={tokenOuts} onSelect={handleSelectTokenOut}/>
                 </div>
@@ -107,16 +122,21 @@ const Create = () => {
                 <div className="w-2/5">
                   <div className="text-md font-bold">Token to Receive</div>
                   <SelectToken token={tokenIn} tokens={tokenIns} onSelect={handleSelectTokenIn}/>
-                </div>
+                </div> */}
               </div>
               <div className="mt-5">
                 <div className="text-md font-bold">Deposit Funds<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
                 <div className="mt-1 w-3/5">
-                  <InputTokenAmount token={tokenOut} onChange={(e) => handleSetFunds(e.target.value)} value={funds}>
+                  <InputTokenAmount token={tokenIn} onChange={(e) => handleSetFunds(e.target.value)} value={funds}>
                     <div className="mt-3 text-sm text-gray-500">
-                      Balance: {maxBalance} {tokenOut.symbol} <span className="text-red-400 cursor-pointer" onClick={handleSetMaxBalance}>
-                        (MAX)
-                      </span>
+                      {tokenIn && <>
+                        Balance: {maxBalance} {tokenIn?.symbol} <span className="text-red-400 cursor-pointer" onClick={handleSetMaxBalance}>
+                          (MAX)
+                        </span>
+                      </>}
+                      {!tokenIn && <>
+                        Balance: -
+                      </>}
                     </div>
                   </InputTokenAmount>
                 </div>

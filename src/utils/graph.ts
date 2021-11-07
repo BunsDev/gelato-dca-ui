@@ -1,6 +1,6 @@
 
 import { GRAPH_URL } from "../constants"
-import { DCAPosition } from "../types"
+import { DCAPosition, TokenPair } from "../types"
 
 export async function getPositions(
   account: string,
@@ -86,6 +86,39 @@ export async function getPosition(
   try {
     const response = await postQuery(GRAPH_URL, query)
     return response.data.position
+  } catch (error) {
+    errorCallback(error)
+    return null
+  }
+}
+
+export async function getTokenPairs(
+  errorCallback: Function = () => {},
+): Promise<TokenPair[] | null> {
+  const query = `
+  {
+    tokenPairs(
+      where: {allowed: true}
+    ) {
+      id
+      token1 {
+        id
+        symbol
+        name
+        decimals
+      }
+      token2 {
+        id
+        symbol
+        name
+        decimals
+      }
+      allowed
+    }
+  }`
+  try {
+    const response = await postQuery(GRAPH_URL, query)
+    return response.data.tokenPairs
   } catch (error) {
     errorCallback(error)
     return null

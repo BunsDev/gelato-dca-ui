@@ -26,6 +26,13 @@ export type DCAPosition = {
   transactions: Transaction[]
 }
 
+export type TokenPair = {
+  id: string
+  token1: Token
+  token2: Token
+  allowed: boolean
+}
+
 export type Token = {
   id: string
   symbol: string
