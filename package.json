@@ -29,7 +29,8 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "typechain": "typechain --target=ethers-v5 --out-dir='./src/types/eth' 'src/constants/abis/*.json'"
   },
   "eslintConfig": {
     "extends": [
@@ -50,10 +51,10 @@
     ]
   },
   "devDependencies": {
-    "@typechain/ethers-v5": "^7.2.0",
+    "@typechain/ethers-v5": "^8.0.2",
     "autoprefixer": "^9",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
-    "typechain": "^5.2.0"
+    "typechain": "^6.0.2"
   }
 }
