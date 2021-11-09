@@ -1,0 +1,1 @@
+export const DCA_CORE_ADDRESS = "0x52edfb74871903e659d945fa810f4b4f2a8e54fb";
