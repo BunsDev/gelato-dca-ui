@@ -1,29 +1,34 @@
-import { BigNumber, ethers } from 'ethers'
+import { BigNumber, ContractTransaction, ethers } from 'ethers'
 import { useState, useCallback, useEffect } from 'react'
 import { DCA_CORE_ADDRESS } from '../constants/address';
 import { DCAPosition } from '../types'
 import { DCA } from '../types/eth/DCA';
 import DCA_ABI from '../constants/abis/DCA.json';
 import useEthereum from './useEthereum';
+import { toast } from 'react-toastify';
 
 export function useDCA(
-  position?: DCAPosition,
+  position: DCAPosition | null,
 ) {
   const { ethAccount } = useEthereum();
-  const [isLoading, setIsLoading] = useState(false);
-  const [dcaCore, setDcaCore] = useState<DCA>();
+  const [dcaCore, setDcaCore] = useState<DCA | null>(null);
   const [minSlippage, setMinSlippage] = useState<BigNumber>();
 
   useEffect(() => {
+    if (!ethAccount) return;
+    const core = (new ethers.Contract(DCA_CORE_ADDRESS, DCA_ABI, ethAccount)) as DCA;
+    setDcaCore(core);
+  }, [ethAccount])
+
+  useEffect(() => {
+    if (dcaCore === null) return;
     const fetchMinSlippage = async () => {
-      const slippage  = await core.minSlippage();
+      const slippage  = await dcaCore.minSlippage();
       setMinSlippage(slippage)
     }
 
-    const core = (new ethers.Contract(DCA_CORE_ADDRESS, DCA_ABI, ethAccount)) as DCA;
-    setDcaCore(core);
     fetchMinSlippage();
-  }, [ethAccount])
+  }, [dcaCore])
 
   const createPositionAndDeposit = useCallback(async (
     tokenIn: string,
@@ -40,78 +45,72 @@ export function useDCA(
     } else {
       if (maxSlippage.lt(minSlippage)) return;
     }
-
-    setIsLoading(true);
+    
+    let tx: ContractTransaction;
     try {
-      const tx = await dcaCore.createPositionAndDeposit(tokenIn, tokenOut, amountIn, amountDCA, intervalDCA, maxSlippage);
-      await tx.wait()
+      tx = await dcaCore.createPositionAndDeposit(tokenIn, tokenOut, amountIn, amountDCA, intervalDCA, maxSlippage);
     } catch (e) {
-      return false;
-    } finally {
-      setIsLoading(false);
+      return;
     }
+
+    return tx;
   }, [dcaCore, minSlippage]);
 
-  const deposit = useCallback(async (amount: BigNumber,  useETH: boolean) => {
+  const deposit = useCallback(async (amount: BigNumber, useETH: boolean) => {
     if (!position || !dcaCore || amount.lte(0)) return;
-
-    setIsLoading(true);
+    
+    console.log(amount, useETH, "<<")
+    let tx: ContractTransaction;
     try {
       if (useETH) {
-        const tx = await dcaCore.deposit(position.id, amount)
-        await tx.wait()
+        tx = await dcaCore.depositETH(position.id, { value: amount })
       } else {
-        const tx = await dcaCore.depositETH(position.id, { value: amount })
-        await tx.wait()
+        tx = await dcaCore.deposit(position.id, amount)
       }
     } catch (e) {
-      return false;
-    } finally {
-      setIsLoading(false);
+      return;
     }
-    
+
+    return tx;
   }, [position, dcaCore]);
 
   const withdrawTokenIn = useCallback(async (amount: BigNumber) => {
     if (!position || !dcaCore || amount.lte(0)) return;
     
-    setIsLoading(true);
+    let tx: ContractTransaction;
     try {
-      const tx = await dcaCore.withdrawTokenIn(position.id, amount)
-      await tx.wait()
+      tx = await dcaCore.withdrawTokenIn(position.id, amount)
     } catch (e) {
-      return false;
-    } finally {
-      setIsLoading(false);
+      return;
     }
+
+    return tx;
   }, [position, dcaCore]);
 
   const withdrawTokenOut = useCallback(async () => {
     if (!position || !dcaCore) return;
 
+    let tx: ContractTransaction;
     try {
-      const tx = await dcaCore.withdrawTokenOut(position.id)
-      await tx.wait()
+      tx = await dcaCore.withdrawTokenOut(position.id)
     } catch (e) {
-      return false;
-    } finally {
-      setIsLoading(false);
+      return;
     }
-    
+
+    return tx;
   }, [position, dcaCore]);
 
   const exit = useCallback(async () => {
     if (!position || !dcaCore) return;
 
+    let tx: ContractTransaction;
     try {
-      const tx = await dcaCore.exit(position.id)
-      await tx.wait()
+      tx = await dcaCore.exit(position.id)
     } catch (e) {
-      return false;
-    } finally {
-      setIsLoading(false);
+      return;
     }
-    
+
+    return tx;
   }, [position, dcaCore]);
 
   return { 
@@ -119,7 +118,6 @@ export function useDCA(
     deposit,
     withdrawTokenIn,
     withdrawTokenOut,
-    exit,
-    isLoading 
+    exit
   }
 }

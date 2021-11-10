@@ -1,3 +1,5 @@
+import { BigNumber } from "ethers";
+import { parseUnits } from "ethers/lib/utils";
 import React, { useCallback, useState } from "react";
 import Button from "../../../../components/Button/Button";
 import InputTokenAmount from "../../../../components/InputTokenAmount/InputTokenAmount";
@@ -8,7 +10,7 @@ import { cleanInputNumber } from "../../../../utils/validation";
 interface ModalDepositProps {
     isOpen: boolean,
     onDismiss: () => void,
-    onSubmit: (amount: string) => void,
+    onSubmit: (amount: BigNumber) => void,
     maxAmount: string,
     token: Token
 }
@@ -21,7 +23,7 @@ const ModalDeposit: React.FC<ModalDepositProps> = ({ isOpen, onDismiss, onSubmit
     }, [onDismiss]);
 
     const handleSubmit = useCallback(() => {
-      onSubmit(amount);
+      onSubmit(parseUnits(amount, token.decimals));
     }, [onSubmit, amount]);
     
     const handleSetAmount = (value: string) => {

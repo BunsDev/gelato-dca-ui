@@ -3,7 +3,7 @@ import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import { DCAPosition } from "../../types";
 import { formatDate, formatDurationHumanize, formatToFixed, getTokenUri } from "../../utils/misc";
 import { useParams } from "react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { BigNumber } from "@ethersproject/bignumber";
 import ModalClaim from "./components/ModalClaim/ModalClaim";
 import ModalDeposit from "./components/ModalDeposit/ModalDeposit";
@@ -12,6 +12,11 @@ import ModalWithdraw from "./components/ModalWithdraw/ModalWithdraw";
 import Button from "../../components/Button/Button";
 import { getPosition } from "../../utils/graph";
 import TableTransactions from "./components/TableTransactions/TableTransactions";
+import { useDCA } from "../../hooks/useDCA";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { ContractTransaction } from "ethers";
+import { WMATIC_ADDRESS } from "../../constants/address";
 
 interface DetailParams {
   positionId: string
@@ -20,7 +25,8 @@ interface DetailParams {
 const Detail = () => {
   let { positionId } = useParams<DetailParams>();
 
-  const [position, setPosition] = useState<DCAPosition | null>();
+  const [position, setPosition] = useState<DCAPosition | null>(null);
+  const { exit, deposit, withdrawTokenIn, withdrawTokenOut } = useDCA(position);
 
   const [isOpenModalExit, setIsOpenModalExit] = useState<boolean>(false);
   const [isOpenModalWithdraw, setIsOpenModalWithdraw] = useState<boolean>(false);
@@ -84,6 +90,39 @@ const Detail = () => {
     if (!position) return null;
     return position.transactions.slice().reverse();
   }, [position]);
+
+  const handleTransaction = (tx?: ContractTransaction) => {
+    if (tx) {
+      toast.info('Transaction sent!', {
+        position: "bottom-right",
+      });
+    } else {
+      toast.error('Transaction cancelled', {
+        position: "bottom-right",
+      });
+    }
+  }
+
+  const handleExit = useCallback(async () => {
+    const tx = await exit();
+    handleTransaction(tx);
+  }, [exit]);
+
+  const handleDeposit = useCallback(async (amount: BigNumber) => {
+    const useETH = position?.tokenIn.id === WMATIC_ADDRESS; 
+    const tx = await deposit(amount, useETH);
+    handleTransaction(tx);
+  }, [deposit, position]);
+
+  const handleWithdrawTokenIn = useCallback(async (amount: BigNumber) => {
+    const tx = await withdrawTokenIn(amount);
+    handleTransaction(tx);
+  }, [withdrawTokenIn]);
+
+  const handleWithdrawTokenOut = useCallback(async () => {
+    const tx = await withdrawTokenOut();
+    handleTransaction(tx);
+  }, [withdrawTokenOut]);
 
   return (
     <div className="w-full flex">
@@ -166,20 +205,23 @@ const Detail = () => {
         </div>
         {position && (
           <>
-            <ModalExit isOpen={isOpenModalExit} onDismiss={() => setIsOpenModalExit(false)} onSubmit={() => {}} 
+            <ModalExit isOpen={isOpenModalExit} onDismiss={() => setIsOpenModalExit(false)} onSubmit={handleExit} 
               tokenIn={position.tokenIn} 
               tokenOut={position.tokenOut} 
               amountIn={position.balanceIn} 
               amountOut={position.balanceOut}/>
-            <ModalDeposit isOpen={isOpenModalDeposit} onDismiss={() => setIsOpenModalDeposit(false)} onSubmit={() => {}} 
+            <ModalDeposit isOpen={isOpenModalDeposit} onDismiss={() => setIsOpenModalDeposit(false)} 
+              onSubmit={(amount: BigNumber) => handleDeposit(amount)} 
               maxAmount={"10000"} token={position.tokenIn}/>
-            <ModalWithdraw isOpen={isOpenModalWithdraw} onDismiss={() => setIsOpenModalWithdraw(false)} onSubmit={() => {}} 
+            <ModalWithdraw isOpen={isOpenModalWithdraw} onDismiss={() => setIsOpenModalWithdraw(false)} 
+              onSubmit={(amount: BigNumber) => handleWithdrawTokenIn(amount)} 
               maxAmount={position.balanceIn} token={position.tokenIn}/>
-            <ModalClaim isOpen={isOpenModalClaim} onDismiss={() => setIsOpenModalClaim(false)} onSubmit={() => {}}
+            <ModalClaim isOpen={isOpenModalClaim} onDismiss={() => setIsOpenModalClaim(false)} onSubmit={handleWithdrawTokenOut}
               amount="1"
               token={position.tokenOut}/>
           </>
         )}
+        <ToastContainer />
     </div>  
   );
 };

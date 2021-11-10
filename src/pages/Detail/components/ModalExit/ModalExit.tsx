@@ -11,7 +11,7 @@ interface ModalExitProps {
     tokenIn: Token,
     tokenOut: Token,
     amountIn: string,
-    amountOut: string
+    amountOut: string,
 }
 
 const ModalExit: React.FC<ModalExitProps> = ({ isOpen, onDismiss, onSubmit, tokenIn, tokenOut, amountIn, amountOut }) => {
