@@ -88,7 +88,7 @@ const Detail = () => {
 
   const transactions = useMemo(() => {
     if (!position) return null;
-    return position.transactions.slice().reverse();
+    return position.transactions.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp))
   }, [position]);
 
   const handleTransaction = (tx?: ContractTransaction) => {
