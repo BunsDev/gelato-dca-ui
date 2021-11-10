@@ -5,7 +5,6 @@ import { DCAPosition } from '../types'
 import { DCA } from '../types/eth/DCA';
 import DCA_ABI from '../constants/abis/DCA.json';
 import useEthereum from './useEthereum';
-import { toast } from 'react-toastify';
 
 export function useDCA(
   position: DCAPosition | null,

@@ -62,7 +62,7 @@ const Create = () => {
 
       text += ` every ${interval}.`;
       return text;
-    }, [funds, tokenPair, dcaAmount, valueInterval, periodInterval])
+    }, [funds, tokenPair, dcaAmount, valueInterval, periodInterval, tokenIn, tokenOut])
 
     const handleSelectTokenPair = (tokenPair: TokenPair) => {
       setTokenPair(tokenPair);
