@@ -4,6 +4,7 @@ import useEthereum from './useEthereum'
 import { DEFAULT_REFRESH_INTERVAL } from '../constants';
 import ERC20_ABI from "../constants/abis/ERC20.json";
 import { ERC20 } from '../types/eth';
+import { approve as erc20Approve, getAllowance } from '../utils/web3';
 
 export function useAllowance(token: string, spender: string) {
   const { accountAddress, ethAccount, injectedProvider } = useEthereum();
@@ -22,8 +23,7 @@ export function useAllowance(token: string, spender: string) {
     
       setApproveIsLoading(true);
       try {
-        const erc20 = (new ethers.Contract(token, ERC20_ABI, ethAccount)) as ERC20;
-        const tx = await erc20.approve(spender, approveAmount);
+        const tx = await erc20Approve(token, spender, approveAmount);
         await tx.wait();
         setApproveIsLoading(false);
       } catch (e) {
@@ -44,11 +44,10 @@ export function useAllowance(token: string, spender: string) {
         return;
       }
       
-      const erc20 = (new ethers.Contract(token, ERC20_ABI, ethAccount)) as ERC20;
-      const balances = await erc20.allowance(accountAddress, spender);
+      const allowance = await getAllowance(token, accountAddress, spender, ethAccount);
       
       setAllowanceIsLoading(false);
-      setAllowance(balances);
+      setAllowance(allowance);
     }
     updateBalances()
     const interval = setInterval(updateBalances, DEFAULT_REFRESH_INTERVAL)
