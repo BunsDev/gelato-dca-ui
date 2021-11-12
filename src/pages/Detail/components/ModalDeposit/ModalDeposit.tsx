@@ -5,6 +5,7 @@ import Button from "../../../../components/Button/Button";
 import InputTokenAmount from "../../../../components/InputTokenAmount/InputTokenAmount";
 import Modal from "../../../../components/Modal/Modal";
 import { Token } from "../../../../types";
+import { formatToFixed } from "../../../../utils/misc";
 import { cleanInputNumber } from "../../../../utils/validation";
 
 interface ModalDepositProps {
@@ -37,7 +38,8 @@ const ModalDeposit: React.FC<ModalDepositProps> = ({ isOpen, onDismiss, onSubmit
             <div className="mx-auto py-5">
               <InputTokenAmount token={token} onChange={(e) => {handleSetAmount(e.target.value)}} value={amount}>
                 <div className="mt-3 text-sm text-gray-500">
-                  Balance: {maxAmount} {token.symbol} <span className="text-red-400 cursor-pointer" onClick={() => handleSetAmount(maxAmount)}>
+                  Balance: {formatToFixed(maxAmount, token.decimals)} {token.symbol} <span className="text-red-400 cursor-pointer" 
+                    onClick={() => handleSetAmount(formatToFixed(maxAmount, token.decimals))}>
                     (MAX)
                   </span>
                 </div>

@@ -1,9 +1,7 @@
-import { BigNumber, constants, ethers } from 'ethers'
+import { BigNumber, constants } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
 import useEthereum from './useEthereum'
 import { DEFAULT_REFRESH_INTERVAL } from '../constants';
-import ERC20_ABI from "../constants/abis/ERC20.json";
-import { ERC20 } from '../types/eth';
 import { approve as erc20Approve, getAllowance } from '../utils/web3';
 
 export function useAllowance(token: string, spender: string) {

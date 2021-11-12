@@ -17,6 +17,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ContractTransaction } from "ethers";
 import { WMATIC_ADDRESS } from "../../constants/address";
+import { useBalance } from "../../hooks/useBalance";
+import useEthereum from "../../hooks/useEthereum";
 
 interface DetailParams {
   positionId: string
@@ -27,6 +29,8 @@ const Detail = () => {
 
   const [position, setPosition] = useState<DCAPosition | null>(null);
   const { exit, deposit, withdrawTokenIn, withdrawTokenOut } = useDCA(position);
+  const { accountAddress } = useEthereum()
+  const { balance:balanceTokenIn } = useBalance(position?.tokenIn.id ?? "", accountAddress)
 
   const [isOpenModalExit, setIsOpenModalExit] = useState<boolean>(false);
   const [isOpenModalWithdraw, setIsOpenModalWithdraw] = useState<boolean>(false);
@@ -212,12 +216,12 @@ const Detail = () => {
               amountOut={position.balanceOut}/>
             <ModalDeposit isOpen={isOpenModalDeposit} onDismiss={() => setIsOpenModalDeposit(false)} 
               onSubmit={(amount: BigNumber) => handleDeposit(amount)} 
-              maxAmount={"10000"} token={position.tokenIn}/>
+              maxAmount={balanceTokenIn.toString()} token={position.tokenIn}/>
             <ModalWithdraw isOpen={isOpenModalWithdraw} onDismiss={() => setIsOpenModalWithdraw(false)} 
               onSubmit={(amount: BigNumber) => handleWithdrawTokenIn(amount)} 
               maxAmount={position.balanceIn} token={position.tokenIn}/>
             <ModalClaim isOpen={isOpenModalClaim} onDismiss={() => setIsOpenModalClaim(false)} onSubmit={handleWithdrawTokenOut}
-              amount="1"
+              amount={position.balanceOut}
               token={position.tokenOut}/>
           </>
         )}

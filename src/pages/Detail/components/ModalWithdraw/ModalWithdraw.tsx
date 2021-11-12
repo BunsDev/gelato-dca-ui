@@ -5,6 +5,7 @@ import Button from "../../../../components/Button/Button";
 import InputTokenAmount from "../../../../components/InputTokenAmount/InputTokenAmount";
 import Modal from "../../../../components/Modal/Modal";
 import { Token } from "../../../../types";
+import { formatToFixed } from "../../../../utils/misc";
 import { cleanInputNumber } from "../../../../utils/validation";
 
 interface ModalWithdrawProps {
@@ -23,7 +24,12 @@ const ModalWithdraw: React.FC<ModalWithdrawProps> = ({ isOpen, onDismiss, onSubm
     }, [onDismiss]);
 
     const handleSubmit = useCallback(() => {
-      onSubmit(parseUnits(amount, token.decimals));
+      if (amount.length === 0) return;
+
+      const withdrawAmount = parseUnits(amount, token.decimals);
+      if (withdrawAmount.lte(0)) return;
+
+      onSubmit(withdrawAmount);
     }, [onSubmit, amount, token.decimals]);
     
     const handleSetAmount = (value: string) => {
@@ -32,12 +38,13 @@ const ModalWithdraw: React.FC<ModalWithdrawProps> = ({ isOpen, onDismiss, onSubm
 
     return (
       <>
-        <Modal title={"Withdraw deposit"} isOpen={isOpen} onDismiss={handleDismiss}>
+        <Modal title={"Withdraw funds"} isOpen={isOpen} onDismiss={handleDismiss}>
           <div className="border-t border-gray-300 pt-2">
             <div className="mx-auto py-5">
               <InputTokenAmount token={token} onChange={(e) => {handleSetAmount(e.target.value)}} value={amount}>
                 <div className="mt-3 text-sm text-gray-500">
-                  Withdrawable: {maxAmount} {token.symbol} <span className="text-red-400 cursor-pointer" onClick={() => handleSetAmount(maxAmount)}>
+                  Withdrawable: {formatToFixed(maxAmount, token.decimals)} {token.symbol} <span className="text-red-400 cursor-pointer" 
+                    onClick={() => handleSetAmount(formatToFixed(maxAmount, token.decimals))}>
                     (MAX)
                   </span>
                 </div>
