@@ -23,8 +23,17 @@ export const tokenOuts: Token[] = [
   }
 ];
 
+export const MATIC_TOKEN = {
+  id: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+  name: "MATIC",
+  symbol: "MATIC",
+  decimals: "18",
+  imageUri: MaticLogo
+}
+
 export const tokenLogos: {[key: string]: string} = {
   "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619": EthLogo,
   "0x2791bca1f2de4661ed88a30c99a7a9449aa84174": UsdcLogo,
   "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270": MaticLogo,
+  "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE": MaticLogo,
 }

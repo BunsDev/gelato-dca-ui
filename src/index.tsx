@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import "react-toggle/style.css" // for ES6 modules
 
 ReactDOM.render(
   <React.StrictMode>

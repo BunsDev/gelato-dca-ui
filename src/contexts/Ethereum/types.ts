@@ -1,4 +1,4 @@
-import { providers, Signer } from "ethers";
+import { BigNumber, providers, Signer } from "ethers";
 import Web3Modal from "web3modal";
 import { CHAIN_ID } from "../../constants";
 
@@ -8,6 +8,8 @@ export interface ContextValues {
     injectedProvider?: providers.Web3Provider,
     web3Modal?: Web3Modal,
     chainId: number,
+    ethBalance?: BigNumber,
+    refreshEthBalance: () => void,
     switchChain: (network: CHAIN_ID) => void,
     loadWeb3Modal: () => void,
     logoutOfWeb3Modal: () => void,

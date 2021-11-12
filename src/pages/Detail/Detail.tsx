@@ -112,8 +112,8 @@ const Detail = () => {
     handleTransaction(tx);
   }, [exit]);
 
-  const handleDeposit = useCallback(async (amount: BigNumber) => {
-    const useETH = position?.tokenIn.id === WMATIC_ADDRESS; 
+  const handleDeposit = useCallback(async (amount: BigNumber, useETH: boolean) => {
+    console.log(useETH, "??");
     const tx = await deposit(amount, useETH);
     handleTransaction(tx);
   }, [deposit, position]);
@@ -215,7 +215,7 @@ const Detail = () => {
               amountIn={position.balanceIn} 
               amountOut={position.balanceOut}/>
             <ModalDeposit isOpen={isOpenModalDeposit} onDismiss={() => setIsOpenModalDeposit(false)} 
-              onSubmit={(amount: BigNumber) => handleDeposit(amount)} 
+              onSubmit={(amount: BigNumber, useETH: boolean) => handleDeposit(amount, useETH)} 
               maxAmount={balanceTokenIn.toString()} token={position.tokenIn}/>
             <ModalWithdraw isOpen={isOpenModalWithdraw} onDismiss={() => setIsOpenModalWithdraw(false)} 
               onSubmit={(amount: BigNumber) => handleWithdrawTokenIn(amount)} 

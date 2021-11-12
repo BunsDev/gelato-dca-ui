@@ -8,6 +8,8 @@ const Context = createContext<ContextValues>({
     web3Modal: undefined,
     injectedProvider: undefined,
     chainId: CHAIN_ID.MAINNET,
+    ethBalance: undefined,
+    refreshEthBalance: () => {},
     switchChain: (_) => {},
     loadWeb3Modal: () => {},
     logoutOfWeb3Modal: () => {}

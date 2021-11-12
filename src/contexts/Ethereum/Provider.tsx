@@ -2,14 +2,31 @@ import React, { useCallback, useState, useEffect } from "react";
 import Context from "./Context";
 import { Web3Provider } from "@ethersproject/providers";
 import { web3Modal } from "../../utils/web3modal";
-import { Signer } from "ethers";
-import { CHAIN_METADATA, CHAIN_ID } from "../../constants";
+import { BigNumber, Signer } from "ethers";
+import { CHAIN_METADATA, CHAIN_ID, DEFAULT_REFRESH_INTERVAL } from "../../constants";
 
 const Provider: React.FC = ({ children }) => {
     const [ethAccount, setEthAccount] = useState<Signer>();
     const [accountAddress, setAccountAddress] = useState<string>("");
     const [injectedProvider, setInjectedProvider] = useState<Web3Provider>();
     const [chainId, setChainId] = useState<number>(CHAIN_ID.MAINNET);
+    const [ethBalance, setEthBalance] = useState<BigNumber>(BigNumber.from(0));
+    const [refreshBalanceCount, setRefreshBalanceCount] = useState(0);
+
+    const refreshEthBalance = useCallback(() => {
+        setRefreshBalanceCount(count => count + 1)
+    }, [setRefreshBalanceCount])
+
+    useEffect(() => {
+        if (!ethAccount) return;
+        const fetchBalance = async () => {
+            const balance = await ethAccount.getBalance();
+            setEthBalance(balance);
+        }
+        fetchBalance();
+        const interval = setInterval(fetchBalance, DEFAULT_REFRESH_INTERVAL)
+        return () => clearInterval(interval)
+    }, [ethAccount, refreshBalanceCount]);
 
     const loadWeb3Modal = useCallback(async () => {
         const provider = await web3Modal.connect();
@@ -69,7 +86,7 @@ const Provider: React.FC = ({ children }) => {
         window.ethereum.on("chainChanged", () => {
         web3Modal.cachedProvider &&
             setTimeout(() => {
-            window.location.reload();
+                window.location.reload();
             }, 1);
         });
 
@@ -77,7 +94,7 @@ const Provider: React.FC = ({ children }) => {
         window.ethereum.on("accountsChanged", () => {
         web3Modal.cachedProvider &&
             setTimeout(() => {
-            window.location.reload();
+                window.location.reload();
             }, 1);
         });
     }, []);
@@ -93,6 +110,8 @@ const Provider: React.FC = ({ children }) => {
                 switchChain,
                 loadWeb3Modal,
                 logoutOfWeb3Modal,
+                ethBalance,
+                refreshEthBalance
             }}>
             {children}
         </Context.Provider>
