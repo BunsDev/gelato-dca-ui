@@ -58,7 +58,7 @@ const Detail = () => {
 
   const dcaLeft = useMemo(() => {
     if (!position) return "-";
-    const times = BigNumber.from(position.balanceOut).div(BigNumber.from(position.amountDCA)).toString();
+    const times = BigNumber.from(position.balanceIn).div(BigNumber.from(position.amountDCA)).toString();
     return `${times} times`;
   }, [position]);
 
