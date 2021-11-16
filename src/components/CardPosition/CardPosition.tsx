@@ -2,6 +2,7 @@ import { DCAPosition } from "../../types";
 import { BsQuestionCircle, BsArrowRightShort } from "react-icons/bs";
 import { formatDate, formatDurationHumanize, formatToFixed, getTokenUri } from "../../utils/misc";
 import { useMemo } from "react";
+import { BigNumber } from "ethers";
 
 interface CardPositionProps {
   position: DCAPosition;
@@ -16,7 +17,7 @@ const CardPosition: React.FC<CardPositionProps> = ({ position }) => {
   }, [lastDCA, intervalDCA]);
 
   const labelNextDCA = useMemo(() => {
-    if (amountDCA > balanceIn) {
+    if (BigNumber.from(amountDCA).gt(BigNumber.from(balanceIn))) {
       return "Not enough fund";
     }
     

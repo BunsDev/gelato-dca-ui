@@ -86,6 +86,10 @@ const Detail = () => {
 
   const nextDCA = useMemo(() => {
     if (!position) return "-";
+    if (BigNumber.from(position.amountDCA).gt(BigNumber.from(position.balanceIn))) {
+      return "-";
+    }
+
     const timestamp = parseInt(position.lastDCA) + parseInt(position.intervalDCA);
     return `${formatDate(timestamp)}`;
   }, [position]);
