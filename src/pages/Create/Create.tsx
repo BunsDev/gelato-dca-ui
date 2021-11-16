@@ -244,6 +244,7 @@ const Create = () => {
                       Estimated number of DCA: {numOfDca}
                     </div>
                   </InputTokenAmount>
+                  {/* TODO: use MATIC toggle */}
                 </div>
               </div>
               <div className="flex mt-5">

@@ -9,7 +9,7 @@ const Main = () => {
     const history = useHistory();
     const { accountAddress } = useEthereum();
     const { positions, isLoading } = usePositions(accountAddress);
-
+    // TODO: unsupported network 
     const goToAdd = () => {
       history.push("/add");
     }
