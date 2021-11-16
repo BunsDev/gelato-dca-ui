@@ -35,11 +35,11 @@ export function useDCA(
     amountIn: BigNumber,
     amountDCA: BigNumber,
     intervalDCA: BigNumber,
-    maxSlippage: BigNumber
+    maxSlippage?: BigNumber
   ) => {
     if (!dcaCore || !minSlippage || !tokenIn || !tokenOut || amountIn.lte(0) || amountDCA.lte(0) || intervalDCA.lte(60)) return;
-
-    if (maxSlippage === null) {
+    
+    if (maxSlippage === undefined) {
       maxSlippage = minSlippage;
     } else {
       if (maxSlippage.lt(minSlippage)) return;
@@ -58,7 +58,6 @@ export function useDCA(
   const deposit = useCallback(async (amount: BigNumber, useETH: boolean) => {
     if (!position || !dcaCore || amount.lte(0)) return;
     
-    console.log(amount, useETH, "<<")
     let tx: ContractTransaction;
     try {
       if (useETH) {

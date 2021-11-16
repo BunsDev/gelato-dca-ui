@@ -16,7 +16,6 @@ import { useDCA } from "../../hooks/useDCA";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ContractTransaction } from "ethers";
-import { WMATIC_ADDRESS } from "../../constants/address";
 import { useBalance } from "../../hooks/useBalance";
 import useEthereum from "../../hooks/useEthereum";
 
@@ -117,7 +116,6 @@ const Detail = () => {
   }, [exit]);
 
   const handleDeposit = useCallback(async (amount: BigNumber, useETH: boolean) => {
-    console.log(useETH, "??");
     const tx = await deposit(amount, useETH);
     handleTransaction(tx);
   }, [deposit, position]);

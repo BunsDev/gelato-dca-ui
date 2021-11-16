@@ -16,7 +16,7 @@ export function useBalance(token: string, account: string) {
 
   useEffect(() => {
     async function updateBalances() {
-      if (!ethAccount || !account || token.length === 0) {
+      if (!ethAccount || !account || !token) {
         return;
       }
       

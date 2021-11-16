@@ -18,10 +18,9 @@ export function useAllowance(token: string, spender: string) {
       }
 
       const approveAmount = amount ? amount : constants.MaxUint256;
-    
       setApproveIsLoading(true);
       try {
-        const tx = await erc20Approve(token, spender, approveAmount);
+        const tx = await erc20Approve(token, spender, approveAmount, ethAccount);
         await tx.wait();
         setApproveIsLoading(false);
       } catch (e) {
@@ -38,7 +37,7 @@ export function useAllowance(token: string, spender: string) {
 
   useEffect(() => {
     async function updateBalances() {
-      if (!ethAccount || !accountAddress) {
+      if (!ethAccount || !accountAddress || !token) {
         return;
       }
       
