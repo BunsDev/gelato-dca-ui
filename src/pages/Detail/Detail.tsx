@@ -118,7 +118,7 @@ const Detail = () => {
   const handleDeposit = useCallback(async (amount: BigNumber, useETH: boolean) => {
     const tx = await deposit(amount, useETH);
     handleTransaction(tx);
-  }, [deposit, position]);
+  }, [deposit]);
 
   const handleWithdrawTokenIn = useCallback(async (amount: BigNumber) => {
     const tx = await withdrawTokenIn(amount);

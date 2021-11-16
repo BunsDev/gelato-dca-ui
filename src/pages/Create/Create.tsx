@@ -96,7 +96,7 @@ const Create = () => {
       if (parseUnits(funds, tokenIn?.decimals).gt(allowance)) return CreateFormValidation.APPROVE_FUND;
       if (dcaAmount.length === 0 || dcaAmount === "0") return CreateFormValidation.INPUT_DCA;
       return CreateFormValidation.CREATE;
-    }, [tokenPair, funds, dcaAmount, balanceIn, allowance]);
+    }, [tokenPair, funds, dcaAmount, balanceIn, allowance, tokenIn?.decimals]);
 
     const createLabel = useMemo(() => {
       let label = "-";
@@ -179,7 +179,7 @@ const Create = () => {
           // TODO: redirect to position
         }
       }
-    }, [formState, funds, dcaAmount, valueInterval, periodInterval, tokenIn, tokenOut]);
+    }, [formState, funds, dcaAmount, valueInterval, periodInterval, tokenIn, tokenOut, refetchAllowance, approve, createPositionAndDeposit]);
 
     const handleTransaction = (tx?: ContractTransaction) => {
       if (tx) {

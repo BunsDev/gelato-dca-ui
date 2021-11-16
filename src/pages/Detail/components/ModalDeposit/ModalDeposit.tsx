@@ -33,7 +33,7 @@ const ModalDeposit: React.FC<ModalDepositProps> = ({ isOpen, onDismiss, onSubmit
 
     const handleSubmit = useCallback(() => {
       onSubmit(parseUnits(amount, token.decimals), useNative);
-    }, [onSubmit, amount, useNative]);
+    }, [onSubmit, amount, token.decimals, useNative]);
     
     const handleSetAmount = (value: string) => {
       setAmount(cleanInputNumber(value));
