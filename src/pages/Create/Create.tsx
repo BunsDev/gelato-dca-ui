@@ -9,7 +9,7 @@ import InputTokenAmount from "../../components/InputTokenAmount/InputTokenAmount
 import ModalSuccess from "../../components/ModalSuccess/ModalSuccess";
 import SelectPeriod from "../../components/SelectPeriod/SelectPeriod";
 import SelectTokenPair from "../../components/SelectTokenPair/SelectTokenPair";
-import { DCA_CORE_ADDRESS } from "../../constants/address";
+import { DCA_CORE_ADDRESS, NATIVE_TOKEN, WMATIC_ADDRESS } from "../../constants/address";
 import { IntervalPeriod } from "../../constants/misc";
 import { useAllowance } from "../../hooks/useAllowance";
 import { useBalance } from "../../hooks/useBalance";
@@ -20,6 +20,8 @@ import { TokenPair } from "../../types";
 import { formatToFixed } from "../../utils/misc";
 import { cleanInputNumber } from "../../utils/validation";
 import { useHistory } from "react-router-dom";
+import Toggle from "react-toggle";
+import { MATIC_TOKEN } from "../../constants/tokens";
 
 enum CreateFormValidation {
   SELECT_PAIR,
@@ -32,7 +34,7 @@ enum CreateFormValidation {
 
 const Create = () => {
     const history = useHistory();
-    const { accountAddress } = useEthereum();
+    const { accountAddress, ethBalance } = useEthereum();
     const {createPositionAndDeposit} = useDCA(null);
     const {tokenPairs} = useTokenPairs();
     const [tokenPair, setTokenPair] = useState<TokenPair>();
@@ -42,8 +44,6 @@ const Create = () => {
     const { balance:balanceIn } = useBalance(tokenIn?.id ?? "", accountAddress)
     const { allowance, approve, refetchAllowance } = useAllowance(tokenIn?.id ?? "", DCA_CORE_ADDRESS)
     
-    // const [tokenOut, setTokenOut] = useState<Token>(tokenOuts[0]);
-    // const [tokenIn, setTokenIn] = useState<Token>();
     const [funds, setFunds] = useState<string>("");
     const [dcaAmount, setDcaAmount] = useState<string>("");
     const [valueInterval, setValueInterval] = useState<string>("1");
@@ -51,6 +51,9 @@ const Create = () => {
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [positionId, setPositionId] = useState<string>("");
+
+    const [useNative, setUseNative] = useState(false)
+    const isNativeToken = tokenIn?.id === WMATIC_ADDRESS
 
     const numOfDca = useMemo(() => {
       if (funds.length === 0 || dcaAmount.length === 0 || !tokenIn) {
@@ -98,11 +101,17 @@ const Create = () => {
     const formState = useMemo(() => {
       if (!tokenPair) return CreateFormValidation.SELECT_PAIR;
       if (funds.length === 0 || dcaAmount === "0") return CreateFormValidation.INPUT_FUND;
-      if (parseUnits(funds, tokenIn?.decimals).gt(balanceIn)) return CreateFormValidation.NOT_ENOUGH_FUND;
-      if (parseUnits(funds, tokenIn?.decimals).gt(allowance)) return CreateFormValidation.APPROVE_FUND;
+
+      if (useNative) {
+        if (!ethBalance) return CreateFormValidation.NOT_ENOUGH_FUND;
+        if (parseUnits(funds, tokenIn?.decimals).gt(ethBalance)) return CreateFormValidation.NOT_ENOUGH_FUND;
+      } else {
+        if (parseUnits(funds, tokenIn?.decimals).gt(balanceIn)) return CreateFormValidation.NOT_ENOUGH_FUND;
+        if (parseUnits(funds, tokenIn?.decimals).gt(allowance)) return CreateFormValidation.APPROVE_FUND;
+      }
       if (dcaAmount.length === 0 || dcaAmount === "0") return CreateFormValidation.INPUT_DCA;
       return CreateFormValidation.CREATE;
-    }, [tokenPair, funds, dcaAmount, balanceIn, allowance, tokenIn?.decimals]);
+    }, [tokenPair, funds, dcaAmount, balanceIn, allowance, tokenIn?.decimals, useNative, useBalance]);
 
     const createLabel = useMemo(() => {
       let label = "-";
@@ -137,9 +146,16 @@ const Create = () => {
       const valueIntervalBN = BigNumber.from(valueInterval.length === 0 ? 1 : valueInterval)
       const interval = valueIntervalBN.mul(BigNumber.from(periodInterval));
 
-      const tx = await createPositionAndDeposit(
-        tokenIn!.id, tokenOut!.id, fundsBN, dcaAmountBN, interval
-      );
+      let tx: ContractTransaction | undefined
+      if (useNative) {
+        tx = await createPositionAndDeposit(
+          NATIVE_TOKEN, tokenOut!.id, fundsBN, dcaAmountBN, interval
+        );
+      } else {
+        tx = await createPositionAndDeposit(
+          tokenIn!.id, tokenOut!.id, fundsBN, dcaAmountBN, interval
+        );
+      }
       handleTransaction(tx)
       if (tx) {
         const receipt = await tx.wait();
@@ -210,6 +226,10 @@ const Create = () => {
       }
     }
 
+    const toggleUseNative = () => {
+      setUseNative((oldValue) => !oldValue);
+    }
+
     const goToPosition = useCallback(() => {
       if (positionId === "") return;
       history.push(`/position/${positionId}`)
@@ -242,19 +262,39 @@ const Create = () => {
               <div className="mt-5">
                 <div className="text-md font-bold">Deposit Funds<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
                 <div className="mt-1 w-3/5">
-                  <InputTokenAmount token={tokenIn} onChange={(e) => handleSetFunds(e.target.value)} value={funds}>
-                    <div className="mt-3 text-sm text-gray-500">
-                      {tokenIn && <>
-                        Balance: {formatToFixed(balanceIn.toString(), tokenIn.decimals)} {tokenIn?.symbol} <span className="text-red-400 cursor-pointer" 
-                          onClick={handleSetMaxBalance}>
+                  {useNative &&
+                    <InputTokenAmount token={MATIC_TOKEN} onChange={(e) => handleSetFunds(e.target.value)} value={funds}>
+                      <div className="mt-3 text-sm text-gray-500">
+                        Balance: {formatToFixed(ethBalance?.toString() ?? "0", MATIC_TOKEN.decimals)} {MATIC_TOKEN.symbol} <span className="text-red-400 cursor-pointer" 
+                          onClick={() => handleSetFunds(formatToFixed(ethBalance?.toString() ?? "0", MATIC_TOKEN.decimals))}>
                           (MAX)
                         </span>
-                      </>}
-                      {!tokenIn && <>
-                        Balance: -
-                      </>}
-                    </div>
-                  </InputTokenAmount>
+                      </div>
+                    </InputTokenAmount>}
+                  {!useNative &&
+                    <InputTokenAmount token={tokenIn} onChange={(e) => handleSetFunds(e.target.value)} value={funds}>
+                      <div className="mt-3 text-sm text-gray-500">
+                        {tokenIn && <>
+                          Balance: {formatToFixed(balanceIn.toString(), tokenIn.decimals)} {tokenIn?.symbol} <span className="text-red-400 cursor-pointer" 
+                            onClick={handleSetMaxBalance}>
+                            (MAX)
+                          </span>
+                        </>}
+                        {!tokenIn && <>
+                          Balance: -
+                        </>}
+                      </div>
+                    </InputTokenAmount>}
+                  {isNativeToken &&
+                    <div className="flex mt-3">
+                      <div className="ml-auto flex">
+                        <Toggle
+                          id='native-toggle'
+                          defaultChecked={useNative}
+                          onChange={toggleUseNative} />
+                        <label htmlFor='native-toggle' className="pl-2 cursor-pointer">Use MATIC</label>
+                      </div>
+                    </div>}
                 </div>
               </div>
 
@@ -266,7 +306,6 @@ const Create = () => {
                       Estimated number of DCA: {numOfDca}
                     </div>
                   </InputTokenAmount>
-                  {/* TODO: use MATIC toggle */}
                 </div>
               </div>
               <div className="flex mt-5">

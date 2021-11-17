@@ -1,6 +1,6 @@
 import { BigNumber, ContractTransaction, ethers } from 'ethers'
 import { useState, useCallback, useEffect } from 'react'
-import { DCA_CORE_ADDRESS } from '../constants/address';
+import { DCA_CORE_ADDRESS, NATIVE_TOKEN } from '../constants/address';
 import { DCAPosition } from '../types'
 import { DCA } from '../types/eth/DCA';
 import DCA_ABI from '../constants/abis/DCA.json';
@@ -47,7 +47,13 @@ export function useDCA(
     
     let tx: ContractTransaction;
     try {
-      tx = await dcaCore.createPositionAndDeposit(tokenIn, tokenOut, amountIn, amountDCA, intervalDCA, maxSlippage);
+      if (tokenIn === NATIVE_TOKEN) {
+        tx = await dcaCore.createPositionAndDeposit(tokenIn, tokenOut, 0, amountDCA, intervalDCA, maxSlippage, {
+          value: amountIn
+        });
+      } else {
+        tx = await dcaCore.createPositionAndDeposit(tokenIn, tokenOut, amountIn, amountDCA, intervalDCA, maxSlippage);
+      }
     } catch (e) {
       return;
     }

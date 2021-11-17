@@ -71,10 +71,10 @@ const ModalDeposit: React.FC<ModalDepositProps> = ({ isOpen, onDismiss, onSubmit
               <div className="flex">
                 <div className="ml-auto flex">
                   <Toggle
-                    id='cheese-status'
+                    id='native-toggle'
                     defaultChecked={useNative}
                     onChange={toggleUseNative} />
-                  <label htmlFor='cheese-status' className="pl-2 cursor-pointer">Use MATIC</label>
+                  <label htmlFor='native-toggle' className="pl-2 cursor-pointer">Use MATIC</label>
                 </div>
               </div>}
             <div className="text-center mt-5">
