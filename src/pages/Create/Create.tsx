@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Button from "../../components/Button/Button";
 import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import InputTokenAmount from "../../components/InputTokenAmount/InputTokenAmount";
+import ModalSuccess from "../../components/ModalSuccess/ModalSuccess";
 import SelectPeriod from "../../components/SelectPeriod/SelectPeriod";
 import SelectTokenPair from "../../components/SelectTokenPair/SelectTokenPair";
 import { DCA_CORE_ADDRESS } from "../../constants/address";
@@ -18,6 +19,7 @@ import { useTokenPairs } from "../../hooks/useTokenPairs";
 import { TokenPair } from "../../types";
 import { formatToFixed } from "../../utils/misc";
 import { cleanInputNumber } from "../../utils/validation";
+import { useHistory } from "react-router-dom";
 
 enum CreateFormValidation {
   SELECT_PAIR,
@@ -29,6 +31,7 @@ enum CreateFormValidation {
 }
 
 const Create = () => {
+    const history = useHistory();
     const { accountAddress } = useEthereum();
     const {createPositionAndDeposit} = useDCA(null);
     const {tokenPairs} = useTokenPairs();
@@ -45,6 +48,9 @@ const Create = () => {
     const [dcaAmount, setDcaAmount] = useState<string>("");
     const [valueInterval, setValueInterval] = useState<string>("1");
     const [periodInterval, setPeriodInterval] = useState<IntervalPeriod>(IntervalPeriod.Hour);
+
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [positionId, setPositionId] = useState<string>("");
 
     const numOfDca = useMemo(() => {
       if (funds.length === 0 || dcaAmount.length === 0 || !tokenIn) {
@@ -125,6 +131,28 @@ const Create = () => {
       return label;
     }, [formState]);
 
+    const create = useCallback(async () => {
+      const fundsBN = parseUnits(funds, tokenIn!.decimals)
+      const dcaAmountBN = parseUnits(dcaAmount, tokenIn!.decimals)
+      const valueIntervalBN = BigNumber.from(valueInterval.length === 0 ? 1 : valueInterval)
+      const interval = valueIntervalBN.mul(BigNumber.from(periodInterval));
+
+      const tx = await createPositionAndDeposit(
+        tokenIn!.id, tokenOut!.id, fundsBN, dcaAmountBN, interval
+      );
+      handleTransaction(tx)
+      if (tx) {
+        const receipt = await tx.wait();
+        if (receipt.status === 1) {
+          const event = receipt.events?.filter((event) => event.event === "PositionCreated")[0]
+          const positionIdBN = BigNumber.from(event!.args![0]);
+          
+          setPositionId(positionIdBN.toString());
+          setIsModalOpen(true)
+        }
+      }
+    }, [funds, dcaAmount, valueInterval, periodInterval, tokenIn, tokenOut, createPositionAndDeposit, setPositionId, setIsModalOpen])
+
     const handleSelectTokenPair = (tokenPair: TokenPair) => {
       setTokenPair(tokenPair);
     }
@@ -166,20 +194,9 @@ const Create = () => {
         await approve()
         refetchAllowance();
       } else if (formState === CreateFormValidation.CREATE) {
-        const fundsBN = parseUnits(funds, tokenIn!.decimals)
-        const dcaAmountBN = parseUnits(dcaAmount, tokenIn!.decimals)
-        const valueIntervalBN = BigNumber.from(valueInterval.length === 0 ? 1 : valueInterval)
-        const interval = valueIntervalBN.mul(BigNumber.from(periodInterval));
-        const tx = await createPositionAndDeposit(
-          tokenIn!.id, tokenOut!.id, fundsBN, dcaAmountBN, interval
-        );
-        handleTransaction(tx)
-        if (tx) {
-          const receipt = tx.wait();
-          // TODO: redirect to position
-        }
+        create()
       }
-    }, [formState, funds, dcaAmount, valueInterval, periodInterval, tokenIn, tokenOut, refetchAllowance, approve, createPositionAndDeposit]);
+    }, [formState, approve, refetchAllowance, create]);
 
     const handleTransaction = (tx?: ContractTransaction) => {
       if (tx) {
@@ -192,6 +209,11 @@ const Create = () => {
         });
       }
     }
+
+    const goToPosition = useCallback(() => {
+      if (positionId === "") return;
+      history.push(`/position/${positionId}`)
+    }, [history, positionId])
     
     return (
       <div className="w-full flex">
@@ -279,6 +301,12 @@ const Create = () => {
               </div>
             </div>
           </div>
+        <ModalSuccess 
+          label="DCA position successfully created!" 
+          btnLabel="See Position" 
+          onClick={goToPosition}
+          onDismiss={() => setIsModalOpen(false)}
+          isOpen={isModalOpen && positionId.length > 0} />
         <ToastContainer />
       </div>
     );
