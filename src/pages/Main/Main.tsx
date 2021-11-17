@@ -4,13 +4,12 @@ import { GUIDEBOOK_URL } from "../../constants/endpoints";
 import Button from "../../components/Button/Button";
 import { usePositions } from "../../hooks/usePositions";
 import useEthereum from "../../hooks/useEthereum";
-import ModalNetwork from "../../components/ModalNetwork/ModalNetwork";
 
 const Main = () => {
     const history = useHistory();
     const { accountAddress } = useEthereum();
     const { positions, isLoading } = usePositions(accountAddress);
-    // TODO: unsupported network 
+
     const goToAdd = () => {
       history.push("/add");
     }

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { CHAIN_ID } from "../../constants";
 import useEthereum from "../../hooks/useEthereum";
 import Button from "../Button/Button";
