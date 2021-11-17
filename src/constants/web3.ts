@@ -9,6 +9,7 @@ export enum WEB3_DATA_TYPE {
 
 export enum CHAIN_ID {
   MAINNET = 1,
+  POLYGON = 137,
   // ROPSTEN = 3,
 }
 
@@ -23,6 +24,17 @@ export const CHAIN_METADATA: {[key in CHAIN_ID]: ETHEREUM_CHAIN} = {
     },
     rpcUrls: [],
     blockExplorerUrls: [],
+  },
+  [CHAIN_ID.POLYGON]: {
+    chainId: "0x89",
+    chainName: "Polygon Mainnet",
+    nativeCurrency: {
+      name: "Matic",
+      symbol: "MATIC",
+      decimals: 18,
+    },
+    rpcUrls: ["https://polygon-rpc.com/"],
+    blockExplorerUrls: ["https://polygonscan.com/"],
   },
   // [CHAIN_ID.ROPSTEN]: {
   //   chainId: "0x3",

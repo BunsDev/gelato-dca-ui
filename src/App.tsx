@@ -2,18 +2,18 @@ import React from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import Main from "./pages/Main/Main";
 
-// import { EthereumProvider } from "./contexts/Ethereum"
-// import ModalNetwork from "./components/ModalNetwork"
-// import useEthereum from "./hooks/useEthereum"
-// import { CHAIN_ID } from "./constants"
 import Logo from "./assets/dango-placeholder.png";
 import Create from "./pages/Create/Create";
 import Detail from "./pages/Detail/Detail";
 import Web3Account from "./components/Web3Account/Web3Account";
 import { EthereumProvider } from "./contexts/Ethereum";
+import ModalNetwork from "./components/ModalNetwork/ModalNetwork";
+import { CHAIN_ID } from "./constants";
+import useEthereum from "./hooks/useEthereum";
 
 function App() {
-  // const { chainId } = useEthereum();
+  const { ethAccount, chainId } = useEthereum();
+  
   return (
     <Router>
       <div className="flex-col h-full">
@@ -41,7 +41,7 @@ function App() {
             </Switch>
           </div>
         </div>
-        {/* <ModalNetwork isOpen={chainId !== undefined && chainId !== CHAIN_ID.MAINNET} /> */}
+        <ModalNetwork isOpen={ethAccount !== undefined  && chainId !== undefined && chainId !== CHAIN_ID.POLYGON} />
       </div>
     </Router>
   );
