@@ -8,7 +8,7 @@ import useEthereum from "../../hooks/useEthereum";
 const Main = () => {
     const history = useHistory();
     const { accountAddress } = useEthereum();
-    const { positions, isLoading } = usePositions(accountAddress);
+    const { positions } = usePositions(accountAddress);
 
     const goToAdd = () => {
       history.push("/add");
