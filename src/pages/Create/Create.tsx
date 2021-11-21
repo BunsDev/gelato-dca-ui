@@ -77,7 +77,7 @@ const Create = () => {
     const confirmationText = useMemo(() => {
       if (!tokenPair) return "-";
       let text = `Depositing ${funds} ${tokenIn!.symbol}`;
-      text += ` to buy ${dcaAmount} ${tokenOut!.symbol} worth of ${tokenIn!.symbol}`;
+      text += ` to buy ${dcaAmount} ${tokenIn!.symbol} worth of ${tokenOut!.symbol}`;
 
       let interval = "";
       if (valueInterval.length > 0 && valueInterval !== "1" && valueInterval !== "0") {
