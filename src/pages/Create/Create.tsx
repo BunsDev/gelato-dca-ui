@@ -100,7 +100,7 @@ const Create = () => {
     
     const formState = useMemo(() => {
       if (!tokenPair) return CreateFormValidation.SELECT_PAIR;
-      if (funds.length === 0 || dcaAmount === "0") return CreateFormValidation.INPUT_FUND;
+      if (funds.length === 0 || funds === "0") return CreateFormValidation.INPUT_FUND;
 
       if (useNative) {
         if (!ethBalance) return CreateFormValidation.NOT_ENOUGH_FUND;
@@ -111,7 +111,7 @@ const Create = () => {
       }
       if (dcaAmount.length === 0 || dcaAmount === "0") return CreateFormValidation.INPUT_DCA;
       return CreateFormValidation.CREATE;
-    }, [tokenPair, funds, dcaAmount, balanceIn, allowance, tokenIn?.decimals, useNative, useBalance]);
+    }, [tokenPair, funds, dcaAmount, balanceIn, allowance, tokenIn?.decimals, useNative, ethBalance]);
 
     const createLabel = useMemo(() => {
       let label = "-";
@@ -167,7 +167,7 @@ const Create = () => {
           setIsModalOpen(true)
         }
       }
-    }, [funds, dcaAmount, valueInterval, periodInterval, tokenIn, tokenOut, createPositionAndDeposit, setPositionId, setIsModalOpen])
+    }, [funds, dcaAmount, valueInterval, periodInterval, tokenIn, tokenOut, createPositionAndDeposit, setPositionId, setIsModalOpen, useNative])
 
     const handleSelectTokenPair = (tokenPair: TokenPair) => {
       setTokenPair(tokenPair);

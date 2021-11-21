@@ -1,6 +1,6 @@
 import { BigNumber } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import Button from "../../../../components/Button/Button";
 import InputTokenAmount from "../../../../components/InputTokenAmount/InputTokenAmount";
 import Modal from "../../../../components/Modal/Modal";
@@ -9,8 +9,16 @@ import { formatToFixed } from "../../../../utils/misc";
 import { cleanInputNumber } from "../../../../utils/validation";
 import Toggle from 'react-toggle';
 import useEthereum from "../../../../hooks/useEthereum";
-import { WMATIC_ADDRESS } from "../../../../constants/address";
+import { DCA_CORE_ADDRESS, WMATIC_ADDRESS } from "../../../../constants/address";
 import { MATIC_TOKEN } from "../../../../constants/tokens";
+import { useAllowance } from "../../../../hooks/useAllowance";
+
+enum DepositFormValidation {
+  INPUT_FUND,
+  NOT_ENOUGH_FUND,
+  APPROVE_FUND,
+  DEPOSIT
+}
 
 interface ModalDepositProps {
     isOpen: boolean,
@@ -22,6 +30,7 @@ interface ModalDepositProps {
 
 const ModalDeposit: React.FC<ModalDepositProps> = ({ isOpen, onDismiss, onSubmit, maxAmount, token }) => {
     const { ethBalance } = useEthereum()
+    const { allowance, approve, refetchAllowance } = useAllowance(token.id, DCA_CORE_ADDRESS)
     const [useNative, setUseNative] = useState(false)
     const isNativeToken = token.id === WMATIC_ADDRESS
 
@@ -31,11 +40,6 @@ const ModalDeposit: React.FC<ModalDepositProps> = ({ isOpen, onDismiss, onSubmit
         onDismiss();
     }, [onDismiss]);
 
-    const handleSubmit = useCallback(() => {
-      // TODO: approve
-      onSubmit(parseUnits(amount, token.decimals), useNative);
-    }, [onSubmit, amount, token.decimals, useNative]);
-    
     const handleSetAmount = (value: string) => {
       setAmount(cleanInputNumber(value));
     }
@@ -43,6 +47,49 @@ const ModalDeposit: React.FC<ModalDepositProps> = ({ isOpen, onDismiss, onSubmit
     const toggleUseNative = () => {
       setUseNative((oldValue) => !oldValue);
     }
+
+    const formState = useMemo(() => {
+      if (amount.length === 0 || amount === "0") return DepositFormValidation.INPUT_FUND;
+
+      if (useNative) {
+        if (!ethBalance) return DepositFormValidation.NOT_ENOUGH_FUND;
+        if (parseUnits(amount, token.decimals).gt(ethBalance)) return DepositFormValidation.NOT_ENOUGH_FUND;
+      } else {
+        if (parseUnits(amount, token.decimals).gt(maxAmount)) return DepositFormValidation.NOT_ENOUGH_FUND;
+        if (parseUnits(amount, token.decimals).gt(allowance)) return DepositFormValidation.APPROVE_FUND;
+      }
+      return DepositFormValidation.DEPOSIT;
+    }, [amount, ethBalance, maxAmount, allowance, token.decimals, useNative]);
+
+    const btnLabel = useMemo(() => {
+      let label = "-";
+      switch (formState) {
+        case DepositFormValidation.INPUT_FUND:
+          label = "Input Fund Amount"
+          break;
+        case DepositFormValidation.NOT_ENOUGH_FUND:
+          label = "Not Enough Balance"
+          break;
+        case DepositFormValidation.APPROVE_FUND:
+          label = "Approve Fund"
+          break;
+        case DepositFormValidation.DEPOSIT:
+          label = "Deposit"
+          break;
+        default:
+          break;
+      }
+      return label;
+    }, [formState]);
+
+    const handleSubmit = useCallback(async () => {
+      if (formState === DepositFormValidation.APPROVE_FUND) {
+        await approve()
+        refetchAllowance();
+      } else if (formState === DepositFormValidation.DEPOSIT) {
+        onSubmit(parseUnits(amount, token.decimals), useNative);
+      }
+    }, [formState, onSubmit, amount, token.decimals, useNative, approve, refetchAllowance]);
 
     return (
       <>
@@ -79,7 +126,10 @@ const ModalDeposit: React.FC<ModalDepositProps> = ({ isOpen, onDismiss, onSubmit
                 </div>
               </div>}
             <div className="text-center mt-5">
-              <Button label="Deposit" onClick={handleSubmit} isPrimary={false} isMono/>
+              <Button isMono label={btnLabel} 
+                onClick={handleSubmit} 
+                isPrimary={false} 
+                isDisabled={!(formState === DepositFormValidation.APPROVE_FUND || formState === DepositFormValidation.DEPOSIT)}/>
             </div>
           </div>
         </Modal>
