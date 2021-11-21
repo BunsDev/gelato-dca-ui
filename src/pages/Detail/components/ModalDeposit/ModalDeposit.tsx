@@ -32,6 +32,7 @@ const ModalDeposit: React.FC<ModalDepositProps> = ({ isOpen, onDismiss, onSubmit
     }, [onDismiss]);
 
     const handleSubmit = useCallback(() => {
+      // TODO: approve
       onSubmit(parseUnits(amount, token.decimals), useNative);
     }, [onSubmit, amount, token.decimals, useNative]);
     

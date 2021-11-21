@@ -4,10 +4,11 @@ import { BsX } from "react-icons/bs";
 interface ModalProps {
     title: string,
     isOpen: boolean;
+    canDismiss?: boolean;
     onDismiss?: () => void,
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onDismiss, title, children }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, canDismiss=true, onDismiss, title, children }) => {
     const handleDismiss = useCallback(() => {
         if (onDismiss) onDismiss();
     }, [onDismiss]);
@@ -19,7 +20,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onDismiss, title, children }) => 
               <div className="bg-white shadow-lg p-4 rounded-2xl w-4/5 md:w-2/3 lg:w-1/3 mb-14" onClick={(e) => {e.stopPropagation()}}>
                   <div className="flex justify-between">
                       <span className="text-lg font-sans">{title}</span>
-                      {handleDismiss && <BsX className="text-3xl cursor-pointer" onClick={handleDismiss}/>}
+                      {canDismiss && <BsX className="text-3xl cursor-pointer" onClick={handleDismiss}/>}
                   </div>
                   <div className="mt-3">
                       {children}

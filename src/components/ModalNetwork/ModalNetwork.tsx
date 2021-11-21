@@ -17,7 +17,7 @@ const ModalNetwork: React.FC<ModalNetworkProps> = ({ isOpen }) => {
     
     return (
       <>
-        <Modal title="" isOpen={isOpen}>
+        <Modal title="" isOpen={isOpen} canDismiss={false}>
             <div className="text-xl mx-auto py-5 font-bold text-center">
               Network not supported
             </div>
