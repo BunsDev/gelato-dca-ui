@@ -9,7 +9,7 @@ const Provider: React.FC = ({ children }) => {
     const [ethAccount, setEthAccount] = useState<Signer>();
     const [accountAddress, setAccountAddress] = useState<string>("");
     const [injectedProvider, setInjectedProvider] = useState<Web3Provider>();
-    const [chainId, setChainId] = useState<number>(CHAIN_ID.MAINNET);
+    const [chainId, setChainId] = useState<number>(0);
     const [ethBalance, setEthBalance] = useState<BigNumber>(BigNumber.from(0));
     const [refreshBalanceCount, setRefreshBalanceCount] = useState(0);
 

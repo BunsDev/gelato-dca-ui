@@ -13,6 +13,7 @@ import useEthereum from "./hooks/useEthereum";
 
 function App() {
   const { ethAccount, chainId } = useEthereum();
+  console.log(ethAccount, chainId)
   
   return (
     <Router>
@@ -41,7 +42,7 @@ function App() {
             </Switch>
           </div>
         </div>
-        <ModalNetwork isOpen={ethAccount !== undefined  && chainId !== undefined && chainId !== CHAIN_ID.POLYGON} />
+        <ModalNetwork isOpen={ethAccount !== undefined && chainId !== 0 && chainId !== CHAIN_ID.POLYGON} />
       </div>
     </Router>
   );
