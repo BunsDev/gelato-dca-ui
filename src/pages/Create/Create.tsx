@@ -10,7 +10,7 @@ import ModalSuccess from "../../components/ModalSuccess/ModalSuccess";
 import SelectPeriod from "../../components/SelectPeriod/SelectPeriod";
 import SelectTokenPair from "../../components/SelectTokenPair/SelectTokenPair";
 import { DCA_CORE_ADDRESS, NATIVE_TOKEN, WMATIC_ADDRESS } from "../../constants/address";
-import { IntervalPeriod } from "../../constants/misc";
+import { IntervalPeriod, TOOLTIP_DCA_AMOUNT, TOOLTIP_DCA_INTERVAL } from "../../constants/misc";
 import { useAllowance } from "../../hooks/useAllowance";
 import { useBalance } from "../../hooks/useBalance";
 import { useDCA } from "../../hooks/useDCA";
@@ -22,6 +22,7 @@ import { cleanInputNumber } from "../../utils/validation";
 import { useHistory } from "react-router-dom";
 import Toggle from "react-toggle";
 import { MATIC_TOKEN } from "../../constants/tokens";
+import ReactTooltip from 'react-tooltip';
 
 enum CreateFormValidation {
   SELECT_PAIR,
@@ -237,6 +238,7 @@ const Create = () => {
     
     return (
       <div className="w-full flex">
+        <ReactTooltip effect="solid"/>
           <div className="w-full sm:w-3/4 lg:w-1/2 mt-28 mx-auto relative">
             <ButtonBack label="Back to Positions overview" />
             <div className="bg-white rounded-lg p-4 font-mono mt-3">
@@ -260,7 +262,7 @@ const Create = () => {
                 </div> */}
               </div>
               <div className="mt-5">
-                <div className="text-md font-bold">Deposit Funds<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
+                <div className="text-md font-bold">Deposit Funds</div>
                 <div className="mt-1 w-3/5">
                   {useNative &&
                     <InputTokenAmount token={MATIC_TOKEN} onChange={(e) => handleSetFunds(e.target.value)} value={funds}>
@@ -299,7 +301,9 @@ const Create = () => {
               </div>
 
               <div className="mt-5">
-                <div className="text-md font-bold">DCA Amount<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
+                <div className="text-md font-bold">DCA Amount
+                  <BsQuestionCircle data-tip={TOOLTIP_DCA_AMOUNT} className="inline pl-1 pb-1" size="18px"/>
+                </div>
                 <div className="mt-1 w-3/5">
                   <InputTokenAmount token={tokenIn} onChange={(e) => handleSetDcaAmount(e.target.value)} value={dcaAmount}>
                     <div className="mt-3 text-sm text-gray-500">
@@ -311,7 +315,7 @@ const Create = () => {
               <div className="flex mt-5">
                 <div>
                   <div className="text-md font-bold">
-                    DCA Interval<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/>
+                    DCA Interval<BsQuestionCircle data-tip={TOOLTIP_DCA_INTERVAL} className="inline pl-1 pb-1" size="18px"/>
                   </div>
                   <div className="flex items-center">
                     <div className="bg-gray-100 border border-gray-200 mt-1 p-3 rounded-2xl">

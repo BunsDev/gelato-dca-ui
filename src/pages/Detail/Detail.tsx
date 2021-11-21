@@ -18,6 +18,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ContractTransaction } from "ethers";
 import { useBalance } from "../../hooks/useBalance";
 import useEthereum from "../../hooks/useEthereum";
+import ReactTooltip from 'react-tooltip';
+import { TOOLTIP_DCA_AMOUNT, TOOLTIP_DCA_INTERVAL, TOOLTIP_DCA_LEFT } from "../../constants";
 
 interface DetailParams {
   positionId: string
@@ -132,6 +134,7 @@ const Detail = () => {
 
   return (
     <div className="w-full flex">
+      <ReactTooltip effect="solid"/>
         <div className="w-full sm:w-3/4 lg:w-2/3 mt-28 mx-auto">
           <ButtonBack label="Back to Positions overview" />
           <div className="my-2 flex">
@@ -157,13 +160,17 @@ const Detail = () => {
               <div className="grid grid-cols-2">
                 <div>
                   <div className="mb-4">
-                    <div className="text-md text-gray-500">DCA interval<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
+                    <div className="text-md text-gray-500">DCA interval
+                      <BsQuestionCircle data-tip={TOOLTIP_DCA_INTERVAL} className="inline pl-1 pb-1" size="18px"/>
+                    </div>
                     <div className="text-lg">
                       {interval}
                     </div>
                   </div>
                   <div className="mb-4">
-                    <div className="text-md text-gray-500">DCA amount<BsQuestionCircle className="inline pl-1 pb-1" size="18px"/></div>
+                    <div className="text-md text-gray-500">DCA amount
+                      <BsQuestionCircle data-tip={TOOLTIP_DCA_AMOUNT} className="inline pl-1 pb-1" size="18px"/>
+                    </div>
                     <div className="text-lg">
                       {dcaAmount}
                     </div>
@@ -176,7 +183,9 @@ const Detail = () => {
                   </div>
                   <div className="mb-4">
                     <div className="text-md text-gray-500">DCA left</div>
-                    <div className="text-lg">{dcaLeft}<BsInfoCircle className="inline pl-1 pb-1" size="16px"/></div>
+                    <div className="text-lg">{dcaLeft}
+                      <BsInfoCircle data-tip={TOOLTIP_DCA_LEFT} className="inline pl-1 pb-1" size="16px"/>
+                    </div>
                   </div>
                 </div>
               </div>
