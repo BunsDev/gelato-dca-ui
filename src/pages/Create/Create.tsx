@@ -210,7 +210,7 @@ const Create = () => {
         setUseNative(false);
       }
 
-    }, [tokenPair]);
+    }, [tokenPair, tokenPairs]);
 
     const handleSubmit = useCallback(async () => {
       if (formState === CreateFormValidation.APPROVE_FUND) {

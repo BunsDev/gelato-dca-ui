@@ -8,16 +8,30 @@ import Detail from "./pages/Detail/Detail";
 import Web3Account from "./components/Web3Account/Web3Account";
 import { EthereumProvider } from "./contexts/Ethereum";
 import ModalNetwork from "./components/ModalNetwork/ModalNetwork";
-import { CHAIN_ID } from "./constants";
+import { CHAIN_ID, WEB3_DATA_TYPE } from "./constants";
 import useEthereum from "./hooks/useEthereum";
+import PolygonLogo from "./assets/polygon.png";
+import { getEtherscanUrl } from "./utils/misc";
+import { DCA_CORE_ADDRESS } from "./constants/address";
 
 function App() {
   const { ethAccount, chainId } = useEthereum();
   
+  const goToEtherscan = () => {
+    const newWindow = window.open(
+      getEtherscanUrl(DCA_CORE_ADDRESS, WEB3_DATA_TYPE.Address), '_blank', 'noopener,noreferrer')
+    if (newWindow) newWindow.opener = null
+  }
+
   return (
     <Router>
       <div className="flex-col h-full">
-        <div className="fixed flex w-screen justify-between py-3 px-5">
+        <div className="fixed flex w-screen justify-center bg-red-500">
+          <span className="text-white font-mono font-light mx-2">
+            dango dapp has not been audited yet - proceed at your own risk
+          </span>
+        </div>
+        <div className="fixed flex w-screen justify-between py-3 px-5 mt-5">
           <div className="flex items-center">
             <img src={Logo} className="h-7"/>
             <span className="text-2xl font-mono font-light mx-2">
@@ -25,6 +39,9 @@ function App() {
             </span>
           </div>
           <Web3Account />
+        </div>
+        <div className="fixed bottom-5 left-5">
+          <img src={PolygonLogo} className="h-6 cursor-pointer" onClick={goToEtherscan}/>
         </div>
         <div className="bg-red-100 pb-10 min-h-screen">
           <div>
