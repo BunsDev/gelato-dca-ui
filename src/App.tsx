@@ -2,7 +2,7 @@ import React from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import Main from "./pages/Main/Main";
 
-import Logo from "./assets/dango-placeholder.png";
+import Logo from "./assets/dangologo.png";
 import Create from "./pages/Create/Create";
 import Detail from "./pages/Detail/Detail";
 import Web3Account from "./components/Web3Account/Web3Account";

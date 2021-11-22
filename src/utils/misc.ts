@@ -2,7 +2,7 @@ import { ETHERSCAN_URL } from "../constants/endpoints";
 import { WEB3_DATA_TYPE } from "../constants/web3";
 import { format, formatDistance, fromUnixTime } from 'date-fns'
 import { formatUnits } from "ethers/lib/utils";
-import { tokenLogos } from "../constants/tokens";
+import { TOKEN_LOGOS, TOKEN_LOGO_UNKNOWN } from "../constants/tokens";
 
 export const getEtherscanUrl = (value: string, type: WEB3_DATA_TYPE): string => {
   const baseUrl = ETHERSCAN_URL;
@@ -40,5 +40,5 @@ export const formatToFixed = (amount: string, decimals: string, roundDecimals?: 
 }
 
 export const getTokenUri = (address: string) => {
-  return tokenLogos[address] || "";
+  return TOKEN_LOGOS[address] || TOKEN_LOGO_UNKNOWN;
 }

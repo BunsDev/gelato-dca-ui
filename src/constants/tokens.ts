@@ -2,6 +2,7 @@ import { Token } from "../types";
 import MaticLogo from "../assets/matic.png";
 import UsdcLogo from "../assets/usdc.png";
 import EthLogo from "../assets/eth.png";
+import UnknownLogo from "../assets/unknown.png";
 
 export const tokenIns: Token[] = [
   {
@@ -31,9 +32,11 @@ export const MATIC_TOKEN = {
   imageUri: MaticLogo
 }
 
-export const tokenLogos: {[key: string]: string} = {
+export const TOKEN_LOGOS: {[key: string]: string} = {
   "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619": EthLogo,
   "0x2791bca1f2de4661ed88a30c99a7a9449aa84174": UsdcLogo,
   "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270": MaticLogo,
   "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE": MaticLogo,
 }
+
+export const TOKEN_LOGO_UNKNOWN = UnknownLogo;
