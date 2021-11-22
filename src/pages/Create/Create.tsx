@@ -23,6 +23,7 @@ import { useHistory } from "react-router-dom";
 import Toggle from "react-toggle";
 import { MATIC_TOKEN } from "../../constants/tokens";
 import ReactTooltip from 'react-tooltip';
+import { AiOutlineSwap } from 'react-icons/ai';
 
 enum CreateFormValidation {
   SELECT_PAIR,
@@ -172,15 +173,8 @@ const Create = () => {
 
     const handleSelectTokenPair = (tokenPair: TokenPair) => {
       setTokenPair(tokenPair);
+      setUseNative(false);
     }
-
-    // const handleSelectTokenOut = (token: Token) => {
-    //   setTokenOut(token);
-    // }
-
-    // const handleSelectTokenIn = (token: Token) => {
-    //   setTokenIn(token);
-    // }
 
     const handleSetFunds = (value: string) => {
       setFunds(cleanInputNumber(value));
@@ -205,6 +199,18 @@ const Create = () => {
     const handleSetMaxBalance = () => {
       setFunds(formatToFixed(balanceIn.toString(), tokenIn?.decimals ?? "18"));
     }
+
+    const handleSwapPair = useCallback(() => {
+      if (!tokenPair) return;
+      
+      const pair = tokenPairs.find(
+        (pair) => pair.token1.id === tokenPair.token2.id && pair.token2.id === tokenPair.token1.id);
+      if (pair !== undefined) {
+        setTokenPair(pair);
+        setUseNative(false);
+      }
+
+    }, [tokenPair]);
 
     const handleSubmit = useCallback(async () => {
       if (formState === CreateFormValidation.APPROVE_FUND) {
@@ -251,6 +257,13 @@ const Create = () => {
                   <SelectTokenPair tokenPair={tokenPair} tokenPairs={tokenPairs} onSelect={handleSelectTokenPair}/>
                   {/* <SelectToken token={tokenOut} tokens={tokenOuts} onSelect={handleSelectTokenOut}/> */}
                 </div>
+                {tokenPair &&
+                  <div className="mt-auto mb-2">
+                    <div className="ml-3 p-2 rounded-full border-gray-300 border cursor-pointer"
+                      onClick={handleSwapPair}>
+                      <AiOutlineSwap/>
+                    </div>
+                  </div>}
                 {/* <div className="w-2/5">
                   <div className="text-md font-bold">Token to Send</div>
                   <SelectToken token={tokenOut} tokens={tokenOuts} onSelect={handleSelectTokenOut}/>
