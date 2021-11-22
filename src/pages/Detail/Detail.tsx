@@ -38,6 +38,8 @@ const Detail = () => {
   const [isOpenModalClaim, setIsOpenModalClaim] = useState<boolean>(false);
   const [isOpenModalDeposit, setIsOpenModalDeposit] = useState<boolean>(false);
 
+  // TODO: is position owner
+
   useEffect(() => {
     const fetchPosition = async () => {
       const position = await getPosition(positionId);
