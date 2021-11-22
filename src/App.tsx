@@ -13,7 +13,6 @@ import useEthereum from "./hooks/useEthereum";
 
 function App() {
   const { ethAccount, chainId } = useEthereum();
-  console.log(ethAccount, chainId)
   
   return (
     <Router>

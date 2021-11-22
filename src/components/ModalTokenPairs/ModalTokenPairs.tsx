@@ -26,15 +26,30 @@ const ModalTokenPairs: React.FC<ModalTokenPairsProps> = ({ isOpen, onDismiss, on
     const filteredTokenPairs = useMemo(() => {
       if (searchQuery.length === 0) return tokenPairs;
 
-      return tokenPairs.filter((tokenPair) => {
-        return tokenPair.token1.id.toLowerCase() === searchQuery.toLowerCase()
-          || tokenPair.token2.id.toLowerCase() === searchQuery.toLowerCase()
-          || tokenPair.token1.name.toLowerCase().includes(searchQuery.toLowerCase())
-          || tokenPair.token1.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-          || tokenPair.token2.name.toLowerCase().includes(searchQuery.toLowerCase())
-          || tokenPair.token2.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-      });
-    }, [searchQuery])
+      const searchQueries = searchQuery.split(" ");
+      let results = new Set<TokenPair>();
+
+      searchQueries.forEach((query) => {
+        if (query.length === 0) return;
+        const result = tokenPairs.filter((tokenPair) => {
+          return tokenPair.token1.id.toLowerCase() === query.toLowerCase()
+            || tokenPair.token2.id.toLowerCase() === query.toLowerCase()
+            || tokenPair.token1.name.toLowerCase().includes(query.toLowerCase())
+            || tokenPair.token1.symbol.toLowerCase().includes(query.toLowerCase())
+            || tokenPair.token2.name.toLowerCase().includes(query.toLowerCase())
+            || tokenPair.token2.symbol.toLowerCase().includes(query.toLowerCase())
+        });
+
+        const resultSet = new Set(result);
+        if (results.size === 0) {
+          results = resultSet
+        } else {
+          results = new Set(Array.from(results).filter(i => resultSet.has(i)));
+        }
+      })
+      
+      return Array.from(results);
+    }, [tokenPairs, searchQuery])
     
     return (
       <>
