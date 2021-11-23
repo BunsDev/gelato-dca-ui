@@ -34,6 +34,7 @@ export async function getPositions(
       intervalDCA
       lastDCA
       maxSlippage
+      owner
     }
   }`
   try {
@@ -81,6 +82,7 @@ export async function getPosition(
         amountIn
         amountOut
       }
+      owner
     }
   }`
   try {

@@ -24,6 +24,7 @@ export type DCAPosition = {
   lastDCA: string
   maxSlippage: string
   transactions: Transaction[]
+  owner: string
 }
 
 export type TokenPair = {

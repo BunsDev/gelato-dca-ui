@@ -32,13 +32,12 @@ const Detail = () => {
   const { exit, deposit, withdrawTokenIn, withdrawTokenOut } = useDCA(position);
   const { accountAddress } = useEthereum()
   const { balance:balanceTokenIn } = useBalance(position?.tokenIn.id ?? "", accountAddress)
+  const [isOwner, setIsOwner] = useState<boolean>(false);
 
   const [isOpenModalExit, setIsOpenModalExit] = useState<boolean>(false);
   const [isOpenModalWithdraw, setIsOpenModalWithdraw] = useState<boolean>(false);
   const [isOpenModalClaim, setIsOpenModalClaim] = useState<boolean>(false);
   const [isOpenModalDeposit, setIsOpenModalDeposit] = useState<boolean>(false);
-
-  // TODO: is position owner
 
   useEffect(() => {
     const fetchPosition = async () => {
@@ -49,6 +48,13 @@ const Detail = () => {
 
     fetchPosition();
   }, [positionId]);
+
+  useEffect(() => {
+    if (!position) return;
+    if (position.owner.toLowerCase() === accountAddress.toLowerCase()) {
+      setIsOwner(true);
+    }
+  }, [position, accountAddress]);
 
   const interval = useMemo(() => {
     if (!position) return "-";
@@ -150,12 +156,16 @@ const Detail = () => {
               )}
               {!position && <span>...</span>}
             </div>
-            <button className="hover:bg-red-300 border-2 border-red-400 rounded-lg px-3 py-1 my-2 mr-2 font-mono text-red-500 ml-auto"
-              onClick={() => setIsOpenModalExit(true)}>
-              Exit Position
-            </button>
-            <Button label="Add Fund" onClick={() => setIsOpenModalDeposit(true)} 
-              isPrimary isMono fullWidth={false} padding="px-8 py-1 my-2"/>
+            {isOwner && (
+              <>
+                <button className="hover:bg-red-300 border-2 border-red-400 rounded-lg px-3 py-1 my-2 mr-2 font-mono text-red-500 ml-auto"
+                  onClick={() => setIsOpenModalExit(true)}>
+                  Exit Position
+                </button>
+                <Button label="Add Fund" onClick={() => setIsOpenModalDeposit(true)} 
+                  isPrimary isMono fullWidth={false} padding="px-8 py-1 my-2"/>
+              </>
+            )}
           </div>
           <div className="grid grid-cols-7 gap-3 font-mono">
             <div className="bg-white rounded-lg p-4 col-span-4">
@@ -201,16 +211,18 @@ const Detail = () => {
                 <div className="text-lg">Available Funds</div>
                 <div className="mt-3 flex justify-between">
                   <span className="text-2xl font-bold">{availableFund}</span>
-                  <Button label="Withdraw" onClick={() => setIsOpenModalWithdraw(true)} 
-                    isPrimary={false} isMono fullWidth={false} padding="px-3 py-1"/>
+                  {isOwner &&
+                    <Button label="Withdraw" onClick={() => setIsOpenModalWithdraw(true)} 
+                      isPrimary={false} isMono fullWidth={false} padding="px-3 py-1"/>}
                 </div>
               </div>
               <div className="bg-white rounded-lg p-4 mt-3">
                 <div className="text-lg">Claimable</div>
                 <div className="mt-3 flex justify-between">
                   <span className="text-2xl font-bold">{claimable}</span>
-                  <Button label="Claim" onClick={() => setIsOpenModalClaim(true)} 
-                    isPrimary={false} isMono fullWidth={false} padding="px-3 py-1"/>
+                  {isOwner &&
+                    <Button label="Claim" onClick={() => setIsOpenModalClaim(true)} 
+                      isPrimary={false} isMono fullWidth={false} padding="px-3 py-1"/>}
                 </div>
               </div>
             </div>
