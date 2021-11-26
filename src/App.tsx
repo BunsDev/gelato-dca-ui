@@ -11,6 +11,7 @@ import ModalNetwork from "./components/ModalNetwork/ModalNetwork";
 import { CHAIN_ID, WEB3_DATA_TYPE } from "./constants";
 import useEthereum from "./hooks/useEthereum";
 import PolygonLogo from "./assets/polygon.png";
+import GelatoLogo from "./assets/gelato.png";
 import { getEtherscanUrl } from "./utils/misc";
 import { DCA_CORE_ADDRESS } from "./constants/address";
 
@@ -40,8 +41,11 @@ function App() {
           </div>
           <Web3Account />
         </div>
-        <div className="fixed bottom-5 left-5">
-          <img src={PolygonLogo} className="h-6 cursor-pointer" onClick={goToEtherscan}/>
+        <div className="fixed bottom-5 w-screen">
+          <div className="flex justify-between px-5">
+            <img src={PolygonLogo} className="h-6 cursor-pointer" onClick={goToEtherscan}/>
+            <img src={GelatoLogo} className="h-5 mr-1"/>
+          </div>
         </div>
         <div className="bg-red-100 pb-10 min-h-screen">
           <div>
